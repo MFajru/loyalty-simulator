@@ -1,5 +1,8 @@
 package com.loyalty.loyalty_simulator.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
@@ -22,9 +25,11 @@ public class Rules {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="action_id", referencedColumnName = "id")
+    @JsonBackReference
     private RulesAction action;
 
     @OneToMany(mappedBy = "rules")
+    @JsonIgnoreProperties("rules")
     private Set<PointHistoryRules> pointHistoryRules = new HashSet<>();
 
     public RulesAction getAction() {

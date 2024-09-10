@@ -1,17 +1,13 @@
 package com.loyalty.loyalty_simulator.controllers;
 
-import com.loyalty.loyalty_simulator.dto.AddRulesRequest;
-import com.loyalty.loyalty_simulator.dto.ResponseWithoutData;
+import com.loyalty.loyalty_simulator.dto.*;
 import com.loyalty.loyalty_simulator.interfaces.IRulesService;
 import com.loyalty.loyalty_simulator.models.Rules;
 import com.loyalty.loyalty_simulator.models.RulesAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
 
@@ -32,7 +28,7 @@ public class RulesController {
                 field.set(rulesRequest, false);
             }
         }
-        Rules newRules = mappingRules(rulesRequest);
+        Rules newRules = mappingRulesRequest(rulesRequest);
 
         ResponseWithoutData res = new ResponseWithoutData();
         boolean isCreated = rulesService.createRules(newRules);
@@ -47,7 +43,31 @@ public class RulesController {
 
     }
 
-    private static Rules mappingRules(AddRulesRequest rulesRequest) {
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseData<RuleResponse>> getRule(@PathVariable Long id) {
+        Rules rule = rulesService.getRule(id);
+        RuleResponse ruleResponse = new RuleResponse();
+        ruleResponse.setId(rule.getId());
+        ruleResponse.setComparison(rule.getComparison());
+        ruleResponse.setEqual(rule.getEqual());
+        ruleResponse.setGreaterThan(rule.getGreaterThan());
+        ruleResponse.setLessThan(rule.getLessThan());
+
+        RuleActionResponse ruleActionResponse =  new RuleActionResponse();
+        ruleActionResponse.setAddition(rule.getAction().getAddition());
+        ruleActionResponse.setDeduction(rule.getAction().getDeduction());
+        ruleActionResponse.setId(rule.getAction().getId());
+        ruleActionResponse.setPoint(rule.getAction().getPoint());
+        ruleResponse.setAction(ruleActionResponse);
+
+        ResponseData<RuleResponse> res = new ResponseData<>();
+        res.setData(ruleResponse);
+        res.setMessage("Get data success!");
+
+        return new ResponseEntity<ResponseData<RuleResponse>>(res, HttpStatus.OK);
+    }
+
+    private static Rules mappingRulesRequest(AddRulesRequest rulesRequest) {
         RulesAction newAction = new RulesAction();
         newAction.setAddition(rulesRequest.getAddition());
         newAction.setDeduction(rulesRequest.getDeduction());

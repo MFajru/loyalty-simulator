@@ -1,5 +1,8 @@
 package com.loyalty.loyalty_simulator.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -17,6 +20,7 @@ public class RulesAction {
     private Integer point;
 
     @OneToMany(mappedBy = "action")
+    @JsonManagedReference
     private Set<Rules> rules = new HashSet<>();
 
     public Long getId() {
