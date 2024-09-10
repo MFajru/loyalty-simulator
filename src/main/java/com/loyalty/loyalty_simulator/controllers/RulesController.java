@@ -20,6 +20,30 @@ public class RulesController {
         this.rulesService = rulesService;
     }
 
+    @PostMapping("/add-action")
+    public ResponseEntity<ResponseWithoutData> addAction(@RequestBody AddActionRequest actionRequest) throws IllegalAccessException {
+        for (Field field: actionRequest.getClass().getDeclaredFields()) {
+            field.setAccessible(true);
+            if (field.get(actionRequest) == null && field.getType().equals(Boolean.class)) {
+                field.set(actionRequest, false);
+            }
+        }
+        RulesAction newAction = new RulesAction();
+        newAction.setPoint(actionRequest.getPoint());
+        newAction.setDeduction(actionRequest.getDeduction());
+        newAction.setAddition(actionRequest.getAddition());
+
+        ResponseWithoutData res = new ResponseWithoutData();
+        boolean isCreated = rulesService.createRulesAction(newAction);
+        if (!isCreated) {
+            res.setMessage("Failed to create data!");
+            return new ResponseEntity<ResponseWithoutData>(res, HttpStatus.BAD_REQUEST);
+        }
+
+        res.setMessage("Successfully create data!");
+        return new ResponseEntity<ResponseWithoutData>(res, HttpStatus.CREATED);
+    }
+
     @PostMapping("/add")
     public ResponseEntity<ResponseWithoutData> addRules(@RequestBody AddRulesRequest rulesRequest) throws IllegalAccessException {
         for (Field field: rulesRequest.getClass().getDeclaredFields()) {
