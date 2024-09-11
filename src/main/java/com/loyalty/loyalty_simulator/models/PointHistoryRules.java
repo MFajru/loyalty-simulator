@@ -14,8 +14,8 @@ public class PointHistoryRules {
     private PointHistory pointHistory;
 
     @ManyToOne
-    @JoinColumn(name = "rule_id", referencedColumnName = "id")
-    private Rules rules;
+    @JoinColumn(name = "action_id", referencedColumnName = "id")
+    private RulesAction action;
 
     public Long getId() {
         return id;
@@ -33,11 +33,11 @@ public class PointHistoryRules {
         this.pointHistory = pointHistory;
     }
 
-    public Rules getRules() {
-        return rules;
+    public RulesAction getRules() {
+        return action;
     }
 
-    public void setRules(Rules rules) {
-        this.rules = rules;
+    public void setRules(RulesAction action) {
+        this.action = action;
     }
 }

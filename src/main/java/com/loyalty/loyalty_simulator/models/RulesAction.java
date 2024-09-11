@@ -23,6 +23,19 @@ public class RulesAction {
     @JsonManagedReference
     private Set<Rules> rules = new HashSet<>();
 
+    @OneToMany(mappedBy = "action")
+    @JsonIgnoreProperties("action")
+    private Set<PointHistoryRules> pointHistoryRules = new HashSet<>();
+
+    public Set<PointHistoryRules> getPointHistoryRules() {
+
+        return pointHistoryRules;
+    }
+
+    public void setPointHistoryRules(Set<PointHistoryRules> pointHistoryRules) {
+        this.pointHistoryRules = pointHistoryRules;
+    }
+
     public Long getId() {
         return id;
     }

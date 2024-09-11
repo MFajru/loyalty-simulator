@@ -29,10 +29,6 @@ public class Rules {
     @JsonBackReference
     private RulesAction action;
 
-    @OneToMany(mappedBy = "rules")
-    @JsonIgnoreProperties("rules")
-    private Set<PointHistoryRules> pointHistoryRules = new HashSet<>();
-
     public RulesAction getAction() {
         return action;
     }
@@ -79,13 +75,5 @@ public class Rules {
 
     public void setEqual(Boolean equal) {
         this.equal = equal;
-    }
-
-    public Set<PointHistoryRules> getPointHistoryRules() {
-        return pointHistoryRules;
-    }
-
-    public void setPointHistoryRules(Set<PointHistoryRules> pointHistoryRules) {
-        this.pointHistoryRules = pointHistoryRules;
     }
 }
