@@ -4,7 +4,7 @@ import com.loyalty.loyalty_simulator.models.Rules;
 import com.loyalty.loyalty_simulator.models.RulesAction;
 
 public interface IRulesService {
-    boolean createRules(Rules newRules);
+    boolean createRule(Rules newRule);
     boolean createRulesAction(RulesAction newAction);
     Rules getRule(Long id);
     RulesAction getAction(Long id);

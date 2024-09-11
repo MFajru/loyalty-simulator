@@ -22,8 +22,8 @@ public class RulesService implements IRulesService {
     }
 
     @Override
-    public boolean createRules(Rules newRules) {
-        rulesRepository.save(newRules);
+    public boolean createRule(Rules newRule) {
+        rulesRepository.save(newRule);
         return true;
     }
 

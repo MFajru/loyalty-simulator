@@ -7,9 +7,12 @@ import com.loyalty.loyalty_simulator.models.RulesAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("rules")
@@ -58,27 +61,36 @@ public class RulesController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<ResponseWithoutData> addRules(@RequestBody AddRulesRequest rulesRequest) throws IllegalAccessException {
-        for (Field field: rulesRequest.getClass().getDeclaredFields()) {
-            field.setAccessible(true);
-            if (field.get(rulesRequest) == null && field.getType().equals(Boolean.class)) {
-                field.set(rulesRequest, false);
-            }
-        }
-        Rules newRules = mappingRulesRequest(rulesRequest);
-
+    @PostMapping("/add-rule/{actionId}")
+    public ResponseEntity<ResponseWithoutData> azddRules(@RequestBody @Validated List<AddRulesRequest> rulesRequest, @PathVariable Long actionId) throws IllegalAccessException {
+        RulesAction existingAct = rulesService.getAction(actionId);
         ResponseWithoutData res = new ResponseWithoutData();
-        boolean isCreated = rulesService.createRules(newRules);
-        if (!isCreated) {
-            res.setMessage("Failed to create data!");
-            return new ResponseEntity<ResponseWithoutData>(res, HttpStatus.BAD_REQUEST);
+        if (existingAct == null) {
+            res.setMessage("Data with id " + actionId + " not found.");
+            return new ResponseEntity<>(res, HttpStatus.NOT_FOUND);
+        }
+        for(AddRulesRequest ruleRequest: rulesRequest) {
+            for (Field field: ruleRequest.getClass().getDeclaredFields()) {
+                field.setAccessible(true);
+                if (field.get(ruleRequest) == null && field.getType().equals(Boolean.class)) {
+                    field.set(ruleRequest, false);
+                }
+            }
+            Rules newRule = new Rules();
+            newRule.setComparison(ruleRequest.getComparison());
+            newRule.setEqual(ruleRequest.getEqual());
+            newRule.setGreaterThan(ruleRequest.getGreaterThan());
+            newRule.setLessThan(ruleRequest.getLessThan());
+            newRule.setAction(existingAct);
+            boolean isCreated = rulesService.createRule(newRule);
+            if (!isCreated) {
+                res.setMessage("Failed to create data!");
+                return new ResponseEntity<ResponseWithoutData>(res, HttpStatus.BAD_REQUEST);
+            }
         }
 
         res.setMessage("Successfully create data!");
         return new ResponseEntity<ResponseWithoutData>(res, HttpStatus.CREATED);
-
-
     }
 
     @GetMapping("/{id}")
@@ -101,22 +113,6 @@ public class RulesController {
         ResponseData<RuleResponse> res = new ResponseData<>();
         res.setData(ruleResponse);
         res.setMessage("Get data success!");
-
         return new ResponseEntity<ResponseData<RuleResponse>>(res, HttpStatus.OK);
-    }
-
-    private static Rules mappingRulesRequest(AddRulesRequest rulesRequest) {
-        RulesAction newAction = new RulesAction();
-        newAction.setAddition(rulesRequest.getAddition());
-        newAction.setDeduction(rulesRequest.getDeduction());
-        newAction.setPoint(rulesRequest.getPoint());
-
-        Rules newRules = new Rules();
-        newRules.setComparison(rulesRequest.getComparison());
-        newRules.setEqual(rulesRequest.getEqual());
-        newRules.setGreaterThan(rulesRequest.getGreaterThan());
-        newRules.setLessThan(rulesRequest.getLessThan());
-        newRules.setAction(newAction);
-        return newRules;
     }
 }
