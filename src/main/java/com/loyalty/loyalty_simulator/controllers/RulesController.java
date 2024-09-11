@@ -44,6 +44,20 @@ public class RulesController {
         return new ResponseEntity<ResponseWithoutData>(res, HttpStatus.CREATED);
     }
 
+    @GetMapping("/action/{id}")
+    public ResponseEntity<ResponseData<RulesAction>> getAction(@PathVariable Long id) {
+        RulesAction action = rulesService.getAction(id);
+        ResponseData<RulesAction> res = new ResponseData<>();
+        if (action == null) {
+            res.setMessage("Data with id " + id + " not found.");
+            res.setData(null);
+            return new ResponseEntity<>(res, HttpStatus.NOT_FOUND);
+        }
+        res.setData(action);
+        res.setMessage("Successfully getting data!");
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
     @PostMapping("/add")
     public ResponseEntity<ResponseWithoutData> addRules(@RequestBody AddRulesRequest rulesRequest) throws IllegalAccessException {
         for (Field field: rulesRequest.getClass().getDeclaredFields()) {

@@ -7,5 +7,6 @@ public interface IRulesService {
     boolean createRules(Rules newRules);
     boolean createRulesAction(RulesAction newAction);
     Rules getRule(Long id);
+    RulesAction getAction(Long id);
 
 }

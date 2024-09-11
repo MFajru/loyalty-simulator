@@ -9,7 +9,6 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Field;
 import java.util.Optional;
 
 @Service
@@ -38,5 +37,11 @@ public class RulesService implements IRulesService {
     public Rules getRule(Long id) {
         Optional<Rules> gottenRule = rulesRepository.findById(id);
         return gottenRule.orElseThrow(()->new EntityNotFoundException("Rules with id " + id + " not found."));
+    }
+
+    @Override
+    public RulesAction getAction(Long id) {
+        Optional<RulesAction> action = rulesActionRepository.findById(id);
+        return action.orElse(null);
     }
 }
