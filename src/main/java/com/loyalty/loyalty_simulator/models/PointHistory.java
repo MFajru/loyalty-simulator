@@ -1,5 +1,6 @@
 package com.loyalty.loyalty_simulator.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -21,6 +22,7 @@ public class PointHistory {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cif", referencedColumnName = "cif")
+    @JsonBackReference
     private Customers customers;
 
     @OneToMany(mappedBy = "pointHistory")

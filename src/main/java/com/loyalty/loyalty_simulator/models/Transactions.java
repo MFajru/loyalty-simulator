@@ -1,5 +1,6 @@
 package com.loyalty.loyalty_simulator.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
@@ -19,17 +20,19 @@ public class Transactions {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cust_cif" , referencedColumnName = "cif")
+    @JsonBackReference
     private Customers customers;
 
+    @JsonProperty("tran_point_history")
     @OneToOne(mappedBy = "transactions")
-    private PointHistory pointHistory;
+    private PointHistory tranPointHistory;
 
-    public PointHistory getPointHistory() {
-        return pointHistory;
+    public PointHistory getTranPointHistory() {
+        return tranPointHistory;
     }
 
-    public void setPointHistory(PointHistory pointHistory) {
-        this.pointHistory = pointHistory;
+    public void setTranPointHistory(PointHistory pointHistory) {
+        this.tranPointHistory = pointHistory;
     }
 
     public String getTranCode() {

@@ -1,5 +1,7 @@
 package com.loyalty.loyalty_simulator.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -17,9 +19,12 @@ public class Customers {
     private String name;
     private Integer point;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "customers")
     private Set<Transactions> transactions = new HashSet<>();
 
+    @JsonProperty("point_histories")
+    @JsonManagedReference
     @OneToMany(mappedBy = "customers")
     private Set<PointHistory> pointHistories = new HashSet<>();
 

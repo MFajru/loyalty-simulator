@@ -3,6 +3,7 @@ package com.loyalty.loyalty_simulator.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -25,6 +26,7 @@ public class RulesAction {
 
     @OneToMany(mappedBy = "action")
     @JsonIgnoreProperties("action")
+    @JsonProperty("point_history_rules")
     private Set<PointHistoryRules> pointHistoryRules = new HashSet<>();
 
     public Set<PointHistoryRules> getPointHistoryRules() {

@@ -1,14 +1,8 @@
 package com.loyalty.loyalty_simulator.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import org.springframework.beans.factory.annotation.Value;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "zzz_rules")
@@ -17,8 +11,8 @@ public class Rules {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @JsonProperty("less_than")
-    private Boolean lessThan;
+    @JsonProperty("lesser_than")
+    private Boolean lesserThan;
     @JsonProperty("greater_than")
     private Boolean greaterThan;
     private Boolean equal;
@@ -53,12 +47,12 @@ public class Rules {
         this.id = id;
     }
 
-    public Boolean getLessThan() {
-        return lessThan;
+    public Boolean getLesserThan() {
+        return lesserThan;
     }
 
-    public void setLessThan(Boolean lessThan) {
-        this.lessThan = lessThan;
+    public void setLesserThan(Boolean lessThan) {
+        this.lesserThan = lessThan;
     }
 
     public Boolean getGreaterThan() {

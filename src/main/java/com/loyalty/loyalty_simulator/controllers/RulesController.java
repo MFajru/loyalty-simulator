@@ -11,7 +11,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -80,7 +79,7 @@ public class RulesController {
             newRule.setComparison(ruleRequest.getComparison());
             newRule.setEqual(ruleRequest.getEqual());
             newRule.setGreaterThan(ruleRequest.getGreaterThan());
-            newRule.setLessThan(ruleRequest.getLessThan());
+            newRule.setLesserThan(ruleRequest.getLessThan());
             newRule.setAction(existingAct);
             boolean isCreated = rulesService.createRule(newRule);
             if (!isCreated) {
@@ -101,7 +100,7 @@ public class RulesController {
         ruleResponse.setComparison(rule.getComparison());
         ruleResponse.setEqual(rule.getEqual());
         ruleResponse.setGreaterThan(rule.getGreaterThan());
-        ruleResponse.setLessThan(rule.getLessThan());
+        ruleResponse.setLessThan(rule.getLesserThan());
 
         RuleActionResponse ruleActionResponse =  new RuleActionResponse();
         ruleActionResponse.setAddition(rule.getAction().getAddition());
