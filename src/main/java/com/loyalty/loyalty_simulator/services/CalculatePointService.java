@@ -7,23 +7,30 @@ import com.loyalty.loyalty_simulator.interfaces.ICalculatePoint;
 import com.loyalty.loyalty_simulator.models.Customers;
 import com.loyalty.loyalty_simulator.models.Rules;
 import com.loyalty.loyalty_simulator.models.RulesAction;
+import com.loyalty.loyalty_simulator.models.Transactions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CalculatePointService implements ICalculatePoint {
-//    private final RulesActionRepository rulesAction;
     private final RulesService rulesService;
     private final CustomersService customersService;
+    private final TransactionsService transactionsService;
     @Autowired
-    public CalculatePointService(RulesService rulesService, CustomersService customersService) {
+    public CalculatePointService(RulesService rulesService, CustomersService customersService, TransactionsService transactionsService) {
         this.rulesService = rulesService;
         this.customersService = customersService;
+        this.transactionsService = transactionsService;
     }
 
     @Override
     public boolean earning(EarningRequest earningRequest) {
-        //verify trancode exist or not
+        Transactions transactions = transactionsService.getTransaction(earningRequest.getTranCode());
+        if (transactions == null) {
+            System.out.println("transaction code not found");
+            return false;
+        }
+
         RulesAction rulesAction = rulesService.getAction(1003L); // next, make to not static (store getAction Id in some table connected to customers)
         if (rulesAction == null) {
             System.out.println("action not found");
