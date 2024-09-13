@@ -1,10 +1,6 @@
 package com.loyalty.loyalty_simulator.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.loyalty.loyalty_simulator.models.Customers;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 
 import java.util.Date;
 

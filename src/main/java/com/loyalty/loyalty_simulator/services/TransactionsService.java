@@ -8,6 +8,8 @@ import com.loyalty.loyalty_simulator.repositories.TransactionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class TransactionsService implements ITransactionsService {
     private final TransactionsRepository transactionsRepository;
@@ -27,5 +29,12 @@ public class TransactionsService implements ITransactionsService {
         newTransaction.setCustomers(existingCust);
         transactionsRepository.save(newTransaction);
         return true;
+    }
+
+    @Override
+    public Transactions getTransaction(String tranCode) {
+        Optional<Transactions> transaction = transactionsRepository.findById(tranCode);
+        return transaction.orElse(null);
+
     }
 }

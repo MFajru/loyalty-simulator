@@ -5,4 +5,5 @@ import com.loyalty.loyalty_simulator.models.Transactions;
 
 public interface ITransactionsService {
     boolean createTransaction(Transactions newTransaction, String cif);
+    Transactions getTransaction(String tranCode);
 }
