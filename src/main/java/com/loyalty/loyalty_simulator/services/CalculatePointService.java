@@ -2,6 +2,7 @@ package com.loyalty.loyalty_simulator.services;
 
 import com.loyalty.loyalty_simulator.dto.ComparisonOperator;
 import com.loyalty.loyalty_simulator.dto.EarningRequest;
+import com.loyalty.loyalty_simulator.dto.UpdateCustomerReq;
 import com.loyalty.loyalty_simulator.interfaces.ICalculatePoint;
 import com.loyalty.loyalty_simulator.models.Customers;
 import com.loyalty.loyalty_simulator.models.Rules;
@@ -22,8 +23,10 @@ public class CalculatePointService implements ICalculatePoint {
 
     @Override
     public boolean earning(EarningRequest earningRequest) {
+        //verify trancode exist or not
         RulesAction rulesAction = rulesService.getAction(1003L); // next, make to not static (store getAction Id in some table connected to customers)
         if (rulesAction == null) {
+            System.out.println("action not found");
             return false;
         }
 
@@ -33,7 +36,12 @@ public class CalculatePointService implements ICalculatePoint {
         operator.setEqual(false);
         operator.setLesserThan(false);
         operator.setLesserThanEqual(false);
+
         Customers cust = customersService.getCustomer(earningRequest.getCif());
+        if (cust == null) {
+            System.out.println("customer not found");
+            return false;
+        }
 
         for (Rules rule: rulesAction.getRules()) {
             if (rule.getEqual() && earningRequest.getAmount().equals(rule.getComparison())) {
@@ -52,14 +60,15 @@ public class CalculatePointService implements ICalculatePoint {
         }
 
         if (!operator.getFullfilled()) {
+            System.out.println("rules not match");
             return false;
         }
 
-        Integer tempPoint = cust.getPoint();
-        tempPoint += rulesAction.getPoint();
-        //update point in customer. make service for update data.
+        UpdateCustomerReq updateCust = new UpdateCustomerReq();
+        updateCust.setName(cust.getName());
+        updateCust.setPoint(cust.getPoint() + rulesAction.getPoint());
 
-        return true;
+        return customersService.updateCustomer(cust.getCif(), updateCust);
 
     }
 }

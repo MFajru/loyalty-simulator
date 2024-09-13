@@ -79,7 +79,7 @@ public class RulesController {
             newRule.setComparison(ruleRequest.getComparison());
             newRule.setEqual(ruleRequest.getEqual());
             newRule.setGreaterThan(ruleRequest.getGreaterThan());
-            newRule.setLesserThan(ruleRequest.getLessThan());
+            newRule.setLesserThan(ruleRequest.getLesserThan());
             newRule.setAction(existingAct);
             boolean isCreated = rulesService.createRule(newRule);
             if (!isCreated) {

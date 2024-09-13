@@ -9,6 +9,7 @@ import jakarta.persistence.ManyToOne;
 import java.util.Date;
 
 public class EarningRequest {
+    @JsonProperty("tran_code")
     private String tranCode;
     private Integer amount;
     @JsonProperty("tran_date")

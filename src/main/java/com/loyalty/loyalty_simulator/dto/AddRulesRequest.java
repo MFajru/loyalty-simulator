@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.loyalty.loyalty_simulator.models.RulesAction;
 
 public class AddRulesRequest {
-    @JsonProperty("less_than")
-    private Boolean lessThan;
+    @JsonProperty("lesser_than")
+    private Boolean lesserThan;
     @JsonProperty("greater_than")
     private Boolean greaterThan;
     private Boolean equal;
@@ -20,12 +20,12 @@ public class AddRulesRequest {
         this.rulesAction = rulesAction;
     }
 
-    public Boolean getLessThan() {
-        return lessThan;
+    public Boolean getLesserThan() {
+        return lesserThan;
     }
 
-    public void setLessThan(Boolean lessThan) {
-        this.lessThan = lessThan;
+    public void setLesserThan(Boolean lesserThan) {
+        this.lesserThan = lesserThan;
     }
 
     public Boolean getGreaterThan() {
