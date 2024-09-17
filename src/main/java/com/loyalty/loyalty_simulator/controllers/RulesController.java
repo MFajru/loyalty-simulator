@@ -34,6 +34,7 @@ public class RulesController {
         newAction.setPoint(actionRequest.getPoint());
         newAction.setDeduction(actionRequest.getDeduction());
         newAction.setAddition(actionRequest.getAddition());
+        newAction.setAmountIncrement(actionRequest.getAmountIncrement());
 
         ResponseWithoutData res = new ResponseWithoutData();
         boolean isCreated = rulesService.createRulesAction(newAction);

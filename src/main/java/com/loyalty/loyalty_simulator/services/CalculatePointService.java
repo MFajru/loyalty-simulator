@@ -27,11 +27,12 @@ public class CalculatePointService implements ICalculatePoint {
     public boolean earning(EarningRequest earningRequest) {
         Transactions transactions = transactionsService.getTransaction(earningRequest.getTranCode());
         if (transactions == null) {
-            System.out.println("transaction code not found");
+            System.out.println("transaction not found");
             return false;
         }
+        // next, bisa check date-nya apakah sudah h+1 atau belum
 
-        RulesAction rulesAction = rulesService.getAction(1003L); // next, make to not static (store getAction Id in some table connected to customers)
+        RulesAction rulesAction = rulesService.getAction(4L); // next, make to not static (store getAction Id in some table connected to customers)
         if (rulesAction == null) {
             System.out.println("action not found");
             return false;
@@ -47,6 +48,12 @@ public class CalculatePointService implements ICalculatePoint {
         Customers cust = customersService.getCustomer(earningRequest.getCif());
         if (cust == null) {
             System.out.println("customer not found");
+            return false;
+        }
+
+        // add condition if the amount is equal or larger than increment
+        if (transactions.getAmount() < rulesAction.getAmountIncrement()) {
+            System.out.println("amount lower than amount increment.");
             return false;
         }
 
@@ -72,8 +79,9 @@ public class CalculatePointService implements ICalculatePoint {
         }
 
         UpdateCustomerReq updateCust = new UpdateCustomerReq();
+        Integer pointAcq = (transactions.getAmount() / rulesAction.getAmountIncrement()) * rulesAction.getPoint();
         updateCust.setName(cust.getName());
-        updateCust.setPoint(cust.getPoint() + rulesAction.getPoint());
+        updateCust.setPoint(cust.getPoint() + pointAcq);
 
         return customersService.updateCustomer(cust.getCif(), updateCust);
 

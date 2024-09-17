@@ -13,12 +13,14 @@ import java.util.Set;
 @Table(name = "zzz_rules_action")
 public class RulesAction {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Boolean addition;
     private Boolean deduction;
     private Integer point;
+    @JsonProperty("amount_increment")
+    private Integer amountIncrement;
 
     @OneToMany(mappedBy = "action")
     @JsonManagedReference
@@ -28,6 +30,14 @@ public class RulesAction {
     @JsonIgnoreProperties("action")
     @JsonProperty("point_history_rules")
     private Set<PointHistoryRules> pointHistoryRules = new HashSet<>();
+
+    public Integer getAmountIncrement() {
+        return amountIncrement;
+    }
+
+    public void setAmountIncrement(Integer amountIncrement) {
+        this.amountIncrement = amountIncrement;
+    }
 
     public Set<PointHistoryRules> getPointHistoryRules() {
 
