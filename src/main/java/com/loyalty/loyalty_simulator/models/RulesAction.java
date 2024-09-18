@@ -37,11 +37,6 @@ public class RulesAction {
         this.pointHistory = pointHistory;
     }
 
-    //    @OneToMany(mappedBy = "action")
-//    @JsonIgnoreProperties("action")
-//    @JsonProperty("point_history_rules")
-//    private Set<PointHistoryRules> pointHistoryRules = new HashSet<>();
-
     public Integer getAmountIncrement() {
         return amountIncrement;
     }
@@ -49,15 +44,6 @@ public class RulesAction {
     public void setAmountIncrement(Integer amountIncrement) {
         this.amountIncrement = amountIncrement;
     }
-
-//    public Set<PointHistoryRules> getPointHistoryRules() {
-//
-//        return pointHistoryRules;
-//    }
-//
-//    public void setPointHistoryRules(Set<PointHistoryRules> pointHistoryRules) {
-//        this.pointHistoryRules = pointHistoryRules;
-//    }
 
     public Long getId() {
         return id;

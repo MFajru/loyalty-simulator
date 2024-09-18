@@ -26,9 +26,6 @@ public class PointHistory {
     @JsonBackReference
     private Customers customers;
 
-//    @OneToMany(mappedBy = "pointHistory")
-//    private Set<PointHistoryRules> pointHistoryRules = new HashSet<>();
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "action_id", referencedColumnName = "id")
     @JsonProperty("rules_action")
@@ -73,12 +70,4 @@ public class PointHistory {
     public void setCustomers(Customers customers) {
         this.customers = customers;
     }
-
-//    public Set<PointHistoryRules> getPointHistoryRules() {
-//        return pointHistoryRules;
-//    }
-//
-//    public void setPointHistoryRules(Set<PointHistoryRules> pointHistoryRules) {
-//        this.pointHistoryRules = pointHistoryRules;
-//    }
 }
