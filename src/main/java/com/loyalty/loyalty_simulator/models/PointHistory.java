@@ -1,6 +1,7 @@
 package com.loyalty.loyalty_simulator.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -25,8 +26,21 @@ public class PointHistory {
     @JsonBackReference
     private Customers customers;
 
-    @OneToMany(mappedBy = "pointHistory")
-    private Set<PointHistoryRules> pointHistoryRules = new HashSet<>();
+//    @OneToMany(mappedBy = "pointHistory")
+//    private Set<PointHistoryRules> pointHistoryRules = new HashSet<>();
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "action_id", referencedColumnName = "id")
+    @JsonProperty("rules_action")
+    private RulesAction rulesAction;
+
+    public RulesAction getRulesAction() {
+        return rulesAction;
+    }
+
+    public void setRulesAction(RulesAction rulesAction) {
+        this.rulesAction = rulesAction;
+    }
 
     public Long getId() {
         return id;
@@ -60,11 +74,11 @@ public class PointHistory {
         this.customers = customers;
     }
 
-    public Set<PointHistoryRules> getPointHistoryRules() {
-        return pointHistoryRules;
-    }
-
-    public void setPointHistoryRules(Set<PointHistoryRules> pointHistoryRules) {
-        this.pointHistoryRules = pointHistoryRules;
-    }
+//    public Set<PointHistoryRules> getPointHistoryRules() {
+//        return pointHistoryRules;
+//    }
+//
+//    public void setPointHistoryRules(Set<PointHistoryRules> pointHistoryRules) {
+//        this.pointHistoryRules = pointHistoryRules;
+//    }
 }

@@ -2,7 +2,7 @@ package com.loyalty.loyalty_simulator.controllers;
 
 import com.loyalty.loyalty_simulator.dto.EarningRequest;
 import com.loyalty.loyalty_simulator.dto.ResponseWithoutData;
-import com.loyalty.loyalty_simulator.interfaces.ICalculatePoint;
+import com.loyalty.loyalty_simulator.interfaces.ICalculatePointService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("calculate-point")
 public class CalculatePointController {
-    private final ICalculatePoint calculatePoint;
+    private final ICalculatePointService calculatePoint;
     @Autowired
-    public CalculatePointController(ICalculatePoint calculatePoint) {
+    public CalculatePointController(ICalculatePointService calculatePoint) {
         this.calculatePoint = calculatePoint;
     }
 

@@ -3,24 +3,23 @@ package com.loyalty.loyalty_simulator.services;
 import com.loyalty.loyalty_simulator.dto.ComparisonOperator;
 import com.loyalty.loyalty_simulator.dto.EarningRequest;
 import com.loyalty.loyalty_simulator.dto.UpdateCustomerReq;
-import com.loyalty.loyalty_simulator.interfaces.ICalculatePoint;
-import com.loyalty.loyalty_simulator.models.Customers;
-import com.loyalty.loyalty_simulator.models.Rules;
-import com.loyalty.loyalty_simulator.models.RulesAction;
-import com.loyalty.loyalty_simulator.models.Transactions;
+import com.loyalty.loyalty_simulator.interfaces.ICalculatePointService;
+import com.loyalty.loyalty_simulator.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CalculatePointService implements ICalculatePoint {
+public class CalculatePointService implements ICalculatePointService {
     private final RulesService rulesService;
     private final CustomersService customersService;
     private final TransactionsService transactionsService;
+    private final PointHistoryService pointHistoryService;
     @Autowired
-    public CalculatePointService(RulesService rulesService, CustomersService customersService, TransactionsService transactionsService) {
+    public CalculatePointService(RulesService rulesService, CustomersService customersService, TransactionsService transactionsService, PointHistoryService pointHistoryService) {
         this.rulesService = rulesService;
         this.customersService = customersService;
         this.transactionsService = transactionsService;
+        this.pointHistoryService = pointHistoryService;
     }
 
     @Override
@@ -32,7 +31,7 @@ public class CalculatePointService implements ICalculatePoint {
         }
         // next, bisa check date-nya apakah sudah h+1 atau belum
 
-        RulesAction rulesAction = rulesService.getAction(4L); // next, make to not static (store getAction Id in some table connected to customers)
+        RulesAction rulesAction = rulesService.getAction(1L); // next, make to not static (store getAction Id in some table connected to customers)
         if (rulesAction == null) {
             System.out.println("action not found");
             return false;
@@ -53,7 +52,7 @@ public class CalculatePointService implements ICalculatePoint {
 
         // add condition if the amount is equal or larger than increment
         if (transactions.getAmount() < rulesAction.getAmountIncrement()) {
-            System.out.println("amount lower than amount increment.");
+            System.out.println("transaction amount lower than amount increment.");
             return false;
         }
 
@@ -82,6 +81,13 @@ public class CalculatePointService implements ICalculatePoint {
         Integer pointAcq = (transactions.getAmount() / rulesAction.getAmountIncrement()) * rulesAction.getPoint();
         updateCust.setName(cust.getName());
         updateCust.setPoint(cust.getPoint() + pointAcq);
+
+        PointHistory pointHistory = new PointHistory();
+        pointHistory.setRulesAction(rulesAction);
+        pointHistory.setAmount(pointAcq);
+        pointHistory.setCustomers(cust);
+        pointHistory.setTransactions(transactions);
+        pointHistoryService.addPointHistory(pointHistory);
 
         return customersService.updateCustomer(cust.getCif(), updateCust);
 

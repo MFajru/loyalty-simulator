@@ -23,6 +23,7 @@ public class Rules {
     @JsonBackReference
     private RulesAction action;
 
+
     public RulesAction getAction() {
         return action;
     }
