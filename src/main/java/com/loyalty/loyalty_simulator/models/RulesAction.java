@@ -1,19 +1,18 @@
 package com.loyalty.loyalty_simulator.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "zzz_rules_action")
 public class RulesAction {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private Boolean addition;
@@ -26,14 +25,15 @@ public class RulesAction {
     @JsonManagedReference
     private Set<Rules> rules = new HashSet<>();
 
-    @OneToOne(mappedBy = "rulesAction")
-    private PointHistory pointHistory;
+    @OneToMany(mappedBy = "rulesAction")
+    @JsonIgnore
+    private List<PointHistory> pointHistory = new ArrayList<>();
 
-    public PointHistory getPointHistory() {
+    public List<PointHistory> getPointHistory() {
         return pointHistory;
     }
 
-    public void setPointHistory(PointHistory pointHistory) {
+    public void setPointHistory(List<PointHistory> pointHistory) {
         this.pointHistory = pointHistory;
     }
 

@@ -31,7 +31,7 @@ public class CalculatePointService implements ICalculatePointService {
         }
         // next, bisa check date-nya apakah sudah h+1 atau belum
 
-        RulesAction rulesAction = rulesService.getAction(1L); // next, make to not static (store getAction Id in some table connected to customers)
+        RulesAction rulesAction = rulesService.getAction(1952L); // next, make to not static (store getAction Id in some table connected to customers)
         if (rulesAction == null) {
             System.out.println("action not found");
             return false;
@@ -43,6 +43,7 @@ public class CalculatePointService implements ICalculatePointService {
         operator.setEqual(false);
         operator.setLesserThan(false);
         operator.setLesserThanEqual(false);
+        operator.setFullfilled(false);
 
         Customers cust = customersService.getCustomer(earningRequest.getCif());
         if (cust == null) {
@@ -67,8 +68,6 @@ public class CalculatePointService implements ICalculatePointService {
                 operator.setFullfilled(true);
             } else if (rule.getGreaterThan() && rule.getEqual() && rule.getEqual() && earningRequest.getAmount() >= rule.getComparison()) {
                 operator.setFullfilled(true);
-            } else {
-                operator.setFullfilled(false);
             }
         }
 
@@ -87,7 +86,12 @@ public class CalculatePointService implements ICalculatePointService {
         pointHistory.setAmount(pointAcq);
         pointHistory.setCustomers(cust);
         pointHistory.setTransactions(transactions);
-        pointHistoryService.addPointHistory(pointHistory);
+        boolean isHistoryAdded = pointHistoryService.addPointHistory(pointHistory);
+
+        if (!isHistoryAdded) {
+            System.out.println("failed to add history");
+            return false;
+        }
 
         return customersService.updateCustomer(cust.getCif(), updateCust);
 

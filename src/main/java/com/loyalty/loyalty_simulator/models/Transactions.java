@@ -1,6 +1,7 @@
 package com.loyalty.loyalty_simulator.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
@@ -25,6 +26,7 @@ public class Transactions {
 
     @JsonProperty("tran_point_history")
     @OneToOne(mappedBy = "transactions")
+    @JsonBackReference("pointHistoryRef")
     private PointHistory tranPointHistory;
 
     public PointHistory getTranPointHistory() {

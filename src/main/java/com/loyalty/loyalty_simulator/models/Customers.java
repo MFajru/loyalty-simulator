@@ -24,7 +24,7 @@ public class Customers {
     private Set<Transactions> transactions = new HashSet<>();
 
     @JsonProperty("point_histories")
-    @JsonManagedReference
+    @JsonManagedReference("ptHisCustomer")
     @OneToMany(mappedBy = "customers")
     private Set<PointHistory> pointHistories = new HashSet<>();
 
