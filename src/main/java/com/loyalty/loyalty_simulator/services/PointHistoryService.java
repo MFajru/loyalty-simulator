@@ -36,7 +36,6 @@ public class PointHistoryService implements IPointHistoryService {
         if (pointHistory.isEmpty()) {
             return null;
         }
-        System.out.println(pointHistory);
         return pointHistory;
     }
 }

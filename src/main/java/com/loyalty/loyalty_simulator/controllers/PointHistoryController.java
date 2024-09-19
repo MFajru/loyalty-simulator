@@ -25,7 +25,6 @@ public class PointHistoryController {
     @GetMapping("{cif}")
     public ResponseEntity<ResponseData<List<PointHistory>>> getHistoryByCif(@PathVariable String cif) {
         List<PointHistory> pointHistory = pointHistoryService.getHistoryByCif(cif);
-        System.out.println(pointHistory);
         ResponseData<List<PointHistory>> res = new ResponseData<>();
         if (pointHistory == null) {
             res.setMessage("Failed getting data, no data found.");
@@ -33,7 +32,6 @@ public class PointHistoryController {
         }
         res.setData(pointHistory);
         res.setMessage("Successfully getting data.");
-        System.out.println("res " + res);
         return new ResponseEntity<ResponseData<List<PointHistory>>>(res, HttpStatus.OK);
 
     }
