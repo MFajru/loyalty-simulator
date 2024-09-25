@@ -5,11 +5,16 @@ import com.loyalty.loyalty_simulator.dto.EarningRequest;
 import com.loyalty.loyalty_simulator.dto.UpdateCustomerReq;
 import com.loyalty.loyalty_simulator.interfaces.ICalculatePointService;
 import com.loyalty.loyalty_simulator.models.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CalculatePointService implements ICalculatePointService {
+    private final static Logger logger = LogManager.getLogger(CalculatePointService.class);
+
     private final RulesService rulesService;
     private final CustomersService customersService;
     private final TransactionsService transactionsService;
@@ -26,14 +31,14 @@ public class CalculatePointService implements ICalculatePointService {
     public boolean earning(EarningRequest earningRequest) {
         Transactions transactions = transactionsService.getTransaction(earningRequest.getTranCode());
         if (transactions == null) {
-            System.out.println("transaction not found");
+            logger.warn("transaction not found");
             return false;
         }
         // next, bisa check date-nya apakah sudah h+1 atau belum
 
         RulesAction rulesAction = rulesService.getAction(1952L); // next, make to not static (store getAction Id in some table connected to customers)
         if (rulesAction == null) {
-            System.out.println("action not found");
+            logger.warn("action not found");
             return false;
         }
 
@@ -47,13 +52,12 @@ public class CalculatePointService implements ICalculatePointService {
 
         Customers cust = customersService.getCustomer(earningRequest.getCif());
         if (cust == null) {
-            System.out.println("customer not found");
+            logger.warn("customer not found");
             return false;
         }
 
-        // add condition if the amount is equal or larger than increment
         if (transactions.getAmount() < rulesAction.getAmountIncrement()) {
-            System.out.println("transaction amount lower than amount increment.");
+            logger.warn("transaction amount lower than amount increment.");
             return false;
         }
 
@@ -72,7 +76,7 @@ public class CalculatePointService implements ICalculatePointService {
         }
 
         if (!operator.getFullfilled()) {
-            System.out.println("rules not match");
+            logger.warn("rules not match");
             return false;
         }
 
@@ -89,7 +93,7 @@ public class CalculatePointService implements ICalculatePointService {
         boolean isHistoryAdded = pointHistoryService.addPointHistory(pointHistory);
 
         if (!isHistoryAdded) {
-            System.out.println("failed to add history");
+            logger.warn("failed to add history");
             return false;
         }
 
