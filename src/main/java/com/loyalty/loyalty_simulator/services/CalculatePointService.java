@@ -3,12 +3,14 @@ package com.loyalty.loyalty_simulator.services;
 import com.loyalty.loyalty_simulator.dto.ComparisonOperator;
 import com.loyalty.loyalty_simulator.dto.EarningRequest;
 import com.loyalty.loyalty_simulator.dto.UpdateCustomerReq;
+import com.loyalty.loyalty_simulator.exceptions.NotFoundException;
 import com.loyalty.loyalty_simulator.interfaces.ICalculatePointService;
 import com.loyalty.loyalty_simulator.models.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,6 +21,7 @@ public class CalculatePointService implements ICalculatePointService {
     private final CustomersService customersService;
     private final TransactionsService transactionsService;
     private final PointHistoryService pointHistoryService;
+
     @Autowired
     public CalculatePointService(RulesService rulesService, CustomersService customersService, TransactionsService transactionsService, PointHistoryService pointHistoryService) {
         this.rulesService = rulesService;
@@ -32,14 +35,17 @@ public class CalculatePointService implements ICalculatePointService {
         Transactions transactions = transactionsService.getTransaction(earningRequest.getTranCode());
         if (transactions == null) {
             logger.warn("transaction not found");
-            return false;
+            throw new NotFoundException("transaction not found", HttpStatus.NOT_FOUND.toString());
+//            return false;
         }
         // next, bisa check date-nya apakah sudah h+1 atau belum
 
         RulesAction rulesAction = rulesService.getAction(1952L); // next, make to not static (store getAction Id in some table connected to customers)
         if (rulesAction == null) {
             logger.warn("action not found");
-            return false;
+            // ini throw lempar ke global exception, belum dicek lewat postman
+            throw new NotFoundException("action not found", HttpStatus.NOT_FOUND.toString());
+//            return false;
         }
 
         ComparisonOperator operator = new ComparisonOperator();
@@ -61,7 +67,7 @@ public class CalculatePointService implements ICalculatePointService {
             return false;
         }
 
-        for (Rules rule: rulesAction.getRules()) {
+        for (Rules rule : rulesAction.getRules()) {
             if (rule.getEqual() && earningRequest.getAmount().equals(rule.getComparison())) {
                 operator.setFullfilled(true);
             } else if (rule.getGreaterThan() && earningRequest.getAmount() > rule.getComparison()) {
