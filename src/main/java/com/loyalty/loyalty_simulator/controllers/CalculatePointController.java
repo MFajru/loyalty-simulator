@@ -22,12 +22,8 @@ public class CalculatePointController {
 
     @PostMapping("earning")
     public ResponseEntity<ResponseWithoutData> earning(@RequestBody EarningRequest earningRequest) {
-        boolean isSuccess = calculatePoint.earning(earningRequest);
+        calculatePoint.earning(earningRequest);
         ResponseWithoutData res = new ResponseWithoutData();
-        if (!isSuccess) {
-            res.setMessage("Point not added!");
-            return new ResponseEntity<ResponseWithoutData>(res, HttpStatus.BAD_REQUEST);
-        }
         res.setMessage("Point added!");
         return new ResponseEntity<ResponseWithoutData>(res, HttpStatus.OK);
     }

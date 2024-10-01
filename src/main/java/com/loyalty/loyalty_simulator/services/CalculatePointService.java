@@ -3,12 +3,11 @@ package com.loyalty.loyalty_simulator.services;
 import com.loyalty.loyalty_simulator.dto.ComparisonOperator;
 import com.loyalty.loyalty_simulator.dto.EarningRequest;
 import com.loyalty.loyalty_simulator.dto.UpdateCustomerReq;
-import com.loyalty.loyalty_simulator.exceptions.NotFoundException;
+import com.loyalty.loyalty_simulator.exceptions.CustomException;
 import com.loyalty.loyalty_simulator.interfaces.ICalculatePointService;
 import com.loyalty.loyalty_simulator.models.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -31,21 +30,18 @@ public class CalculatePointService implements ICalculatePointService {
     }
 
     @Override
-    public boolean earning(EarningRequest earningRequest) {
+    public void earning(EarningRequest earningRequest) {
         Transactions transactions = transactionsService.getTransaction(earningRequest.getTranCode());
         if (transactions == null) {
             logger.warn("transaction not found");
-            throw new NotFoundException("transaction not found", HttpStatus.NOT_FOUND.toString());
-//            return false;
+            throw new CustomException("transaction not found", HttpStatus.NOT_FOUND.toString());
         }
         // next, bisa check date-nya apakah sudah h+1 atau belum
 
         RulesAction rulesAction = rulesService.getAction(1952L); // next, make to not static (store getAction Id in some table connected to customers)
         if (rulesAction == null) {
             logger.warn("action not found");
-            // ini throw lempar ke global exception, belum dicek lewat postman
-            throw new NotFoundException("action not found", HttpStatus.NOT_FOUND.toString());
-//            return false;
+            throw new CustomException("action not found", HttpStatus.NOT_FOUND.toString());
         }
 
         ComparisonOperator operator = new ComparisonOperator();
@@ -59,12 +55,14 @@ public class CalculatePointService implements ICalculatePointService {
         Customers cust = customersService.getCustomer(earningRequest.getCif());
         if (cust == null) {
             logger.warn("customer not found");
-            return false;
+            throw new CustomException("customer not found", HttpStatus.NOT_FOUND.toString());
+
         }
 
         if (transactions.getAmount() < rulesAction.getAmountIncrement()) {
-            logger.warn("transaction amount lower than amount increment.");
-            return false;
+            logger.warn("transaction amount lower than amount increment");
+            throw new CustomException("transaction amount lower than amount increment", HttpStatus.BAD_REQUEST.toString());
+
         }
 
         for (Rules rule : rulesAction.getRules()) {
@@ -83,9 +81,19 @@ public class CalculatePointService implements ICalculatePointService {
 
         if (!operator.getFullfilled()) {
             logger.warn("rules not match");
-            return false;
+            throw new CustomException("rules not match", HttpStatus.BAD_REQUEST.toString());
         }
 
+        PointHistory pointHistory = getPointHistory(transactions, rulesAction, cust);
+        boolean isHistoryAdded = pointHistoryService.addPointHistory(pointHistory);
+
+        if (!isHistoryAdded) {
+            logger.warn("failed to add history");
+            throw new CustomException("failed to add history", HttpStatus.BAD_REQUEST.toString());
+        }
+    }
+
+    private static PointHistory getPointHistory(Transactions transactions, RulesAction rulesAction, Customers cust) {
         UpdateCustomerReq updateCust = new UpdateCustomerReq();
         Integer pointAcq = (transactions.getAmount() / rulesAction.getAmountIncrement()) * rulesAction.getPoint();
         updateCust.setName(cust.getName());
@@ -96,14 +104,6 @@ public class CalculatePointService implements ICalculatePointService {
         pointHistory.setAmount(pointAcq);
         pointHistory.setCustomers(cust);
         pointHistory.setTransactions(transactions);
-        boolean isHistoryAdded = pointHistoryService.addPointHistory(pointHistory);
-
-        if (!isHistoryAdded) {
-            logger.warn("failed to add history");
-            return false;
-        }
-
-        return customersService.updateCustomer(cust.getCif(), updateCust);
-
+        return pointHistory;
     }
 }

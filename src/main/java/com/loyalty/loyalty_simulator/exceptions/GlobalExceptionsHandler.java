@@ -2,7 +2,6 @@ package com.loyalty.loyalty_simulator.exceptions;
 
 import com.loyalty.loyalty_simulator.dto.GeneralErrorResponse;
 import com.loyalty.loyalty_simulator.dto.ResponseData;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +13,8 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class GlobalExceptionsHandler {
 
-    @ExceptionHandler(NotFoundException.class)
-    public <T> ResponseEntity<ResponseData<T>> handleNotFoundException(NotFoundException exception) {
+    @ExceptionHandler(CustomException.class)
+    public <T> ResponseEntity<ResponseData<T>> handleNotFoundException(CustomException exception) {
         ResponseData<T> res = new ResponseData<T>();
         res.setMessage(exception.getMessage());
         res.setData(null);
