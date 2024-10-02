@@ -4,20 +4,32 @@ import java.time.LocalDateTime;
 
 
 public class GeneralErrorResponse {
+    private String uuid;
     private String message;
     private Integer statusCode;
     private String statusName;
+    private String fileName;
     private String path;
     private String method;
     private LocalDateTime timestamp;
 
-    public GeneralErrorResponse(String message, Integer statusCode, String statusName, String path, String method, LocalDateTime timestamp) {
+    public GeneralErrorResponse(String uuid, String message, Integer statusCode, String statusName, String fileName, String path, String method, LocalDateTime timestamp) {
+        this.uuid = uuid;
         this.message = message;
         this.statusCode = statusCode;
         this.statusName = statusName;
+        this.fileName = fileName;
         this.path = path;
         this.method = method;
         this.timestamp = timestamp;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public String getMessage() {
@@ -42,6 +54,14 @@ public class GeneralErrorResponse {
 
     public void setStatusName(String statusName) {
         this.statusName = statusName;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public String getPath() {

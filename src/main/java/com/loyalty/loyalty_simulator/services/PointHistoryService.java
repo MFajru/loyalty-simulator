@@ -1,5 +1,6 @@
 package com.loyalty.loyalty_simulator.services;
 
+import com.loyalty.loyalty_simulator.exceptions.CustomException;
 import com.loyalty.loyalty_simulator.interfaces.IPointHistoryService;
 import com.loyalty.loyalty_simulator.models.Customers;
 import com.loyalty.loyalty_simulator.models.PointHistory;
@@ -7,6 +8,7 @@ import com.loyalty.loyalty_simulator.repositories.PointHistoryRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,8 +36,7 @@ public class PointHistoryService implements IPointHistoryService {
         Customers customer = customersService.getCustomer(cif);
         if (customer == null) {
             String mess = "Customer with cif " + cif + " not found.";
-            logger.warn(mess);
-            return  null;
+            throw new CustomException(mess, HttpStatus.NOT_FOUND.toString());
         }
         List<PointHistory> pointHistory = pointHistoryRepository.findByCustomers(customer);
         if (pointHistory.isEmpty()) {
