@@ -1,6 +1,7 @@
 package com.loyalty.loyalty_simulator.services;
 
 import com.loyalty.loyalty_simulator.dto.UpdateCustomerReq;
+import com.loyalty.loyalty_simulator.exceptions.BadRequestException;
 import com.loyalty.loyalty_simulator.interfaces.ICustomersService;
 import com.loyalty.loyalty_simulator.models.Customers;
 import com.loyalty.loyalty_simulator.repositories.CustomersRepository;
@@ -19,6 +20,10 @@ public class CustomersService implements ICustomersService {
 
     @Override
     public void createCustomer(Customers newCustomer) {
+        Customers customer = customersRepository.findByCif(newCustomer.getCif());
+        if (customer != null) {
+            throw new BadRequestException("CIF is already exist");
+        }
         customersRepository.save(newCustomer);
     }
 

@@ -1,6 +1,6 @@
 package com.loyalty.loyalty_simulator.services;
 
-import com.loyalty.loyalty_simulator.exceptions.CustomException;
+import com.loyalty.loyalty_simulator.exceptions.NotFoundException;
 import com.loyalty.loyalty_simulator.interfaces.IPointHistoryService;
 import com.loyalty.loyalty_simulator.models.Customers;
 import com.loyalty.loyalty_simulator.models.PointHistory;
@@ -36,7 +36,7 @@ public class PointHistoryService implements IPointHistoryService {
         Customers customer = customersService.getCustomer(cif);
         if (customer == null) {
             String mess = "Customer with cif " + cif + " not found.";
-            throw new CustomException(mess, HttpStatus.NOT_FOUND.toString());
+            throw new NotFoundException(mess, HttpStatus.NOT_FOUND.toString());
         }
         List<PointHistory> pointHistory = pointHistoryRepository.findByCustomers(customer);
         if (pointHistory.isEmpty()) {

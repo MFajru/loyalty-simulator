@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.loyalty.loyalty_simulator.dto.GeneralErrorResponse;
 import com.loyalty.loyalty_simulator.dto.ResponseData;
+import com.loyalty.loyalty_simulator.dto.ResponseWithoutData;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,8 +23,8 @@ public class GlobalExceptionsHandler {
 
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
-    @ExceptionHandler(CustomException.class)
-    public <T> ResponseEntity<ResponseData<T>> handleNotFoundException(CustomException exception, HttpServletRequest request) {
+    @ExceptionHandler(NotFoundException.class)
+    public <T> ResponseEntity<ResponseData<T>> handleNotFoundException(NotFoundException exception, HttpServletRequest request) {
         ResponseData<T> res = new ResponseData<T>();
         res.setMessage(exception.getMessage());
         res.setData(null);
@@ -42,4 +43,12 @@ public class GlobalExceptionsHandler {
         }
         return ResponseEntity.internalServerError().body(errorResponse);
     }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ResponseWithoutData> handleBadRequestException(BadRequestException badRequestException) {
+        ResponseWithoutData res = new ResponseWithoutData();
+        res.setMessage(badRequestException.getMessage());
+        return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+    }
+
 }

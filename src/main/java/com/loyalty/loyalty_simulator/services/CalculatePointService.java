@@ -3,7 +3,7 @@ package com.loyalty.loyalty_simulator.services;
 import com.loyalty.loyalty_simulator.dto.ComparisonOperator;
 import com.loyalty.loyalty_simulator.dto.EarningRequest;
 import com.loyalty.loyalty_simulator.dto.UpdateCustomerReq;
-import com.loyalty.loyalty_simulator.exceptions.CustomException;
+import com.loyalty.loyalty_simulator.exceptions.NotFoundException;
 import com.loyalty.loyalty_simulator.interfaces.ICalculatePointService;
 import com.loyalty.loyalty_simulator.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +29,13 @@ public class CalculatePointService implements ICalculatePointService {
     public void earning(EarningRequest earningRequest) {
         Transactions transactions = transactionsService.getTransaction(earningRequest.getTranCode());
         if (transactions == null) {
-            throw new CustomException("transaction not found", HttpStatus.NOT_FOUND.toString());
+            throw new NotFoundException("transaction not found", HttpStatus.NOT_FOUND.toString());
         }
         // next, bisa check date-nya apakah sudah h+1 atau belum
 
         RulesAction rulesAction = rulesService.getAction(1952L); // next, make to not static (store getAction Id in some table connected to customers)
         if (rulesAction == null) {
-            throw new CustomException("action not found", HttpStatus.NOT_FOUND.toString());
+            throw new NotFoundException("action not found", HttpStatus.NOT_FOUND.toString());
         }
 
         ComparisonOperator operator = new ComparisonOperator();
@@ -48,12 +48,12 @@ public class CalculatePointService implements ICalculatePointService {
 
         Customers cust = customersService.getCustomer(earningRequest.getCif());
         if (cust == null) {
-            throw new CustomException("customer not found", HttpStatus.NOT_FOUND.toString());
+            throw new NotFoundException("customer not found", HttpStatus.NOT_FOUND.toString());
 
         }
 
         if (transactions.getAmount() < rulesAction.getAmountIncrement()) {
-            throw new CustomException("transaction amount lower than amount increment", HttpStatus.BAD_REQUEST.toString());
+            throw new NotFoundException("transaction amount lower than amount increment", HttpStatus.BAD_REQUEST.toString());
 
         }
 
@@ -72,14 +72,14 @@ public class CalculatePointService implements ICalculatePointService {
         }
 
         if (!operator.getFullfilled()) {
-            throw new CustomException("rules not match", HttpStatus.BAD_REQUEST.toString());
+            throw new NotFoundException("rules not match", HttpStatus.BAD_REQUEST.toString());
         }
 
         PointHistory pointHistory = getPointHistory(transactions, rulesAction, cust);
         boolean isHistoryAdded = pointHistoryService.addPointHistory(pointHistory);
 
         if (!isHistoryAdded) {
-            throw new CustomException("failed to add history", HttpStatus.BAD_REQUEST.toString());
+            throw new NotFoundException("failed to add history", HttpStatus.BAD_REQUEST.toString());
         }
     }
 

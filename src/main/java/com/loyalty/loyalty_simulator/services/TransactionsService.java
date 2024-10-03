@@ -1,5 +1,7 @@
 package com.loyalty.loyalty_simulator.services;
 
+import com.loyalty.loyalty_simulator.exceptions.BadRequestException;
+import com.loyalty.loyalty_simulator.exceptions.NotFoundException;
 import com.loyalty.loyalty_simulator.interfaces.ITransactionsService;
 import com.loyalty.loyalty_simulator.models.Customers;
 import com.loyalty.loyalty_simulator.models.Transactions;
@@ -27,6 +29,11 @@ public class TransactionsService implements ITransactionsService {
             return false;
         }
         newTransaction.setCustomers(existingCust);
+        Transactions transaction = transactionsRepository.findByTranCode(newTransaction.getTranCode());
+        if (transaction != null) {
+            throw new BadRequestException("Transaction code is already exist");
+        }
+
         transactionsRepository.save(newTransaction);
         return true;
     }
