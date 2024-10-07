@@ -28,6 +28,9 @@ public class Customers {
     @OneToMany(mappedBy = "customers")
     private Set<PointHistory> pointHistories = new HashSet<>();
 
+    @OneToMany(mappedBy = "customer")
+    private Set<CustomerAction> customerActions = new HashSet<>();
+
     public Set<PointHistory> getPointHistories() {
         return pointHistories;
     }

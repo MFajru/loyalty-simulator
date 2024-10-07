@@ -62,7 +62,7 @@ public class RulesController {
     }
 
     @PostMapping("/add-rule/{actionId}")
-    public ResponseEntity<ResponseWithoutData> azddRules(@RequestBody @Validated List<AddRulesRequest> rulesRequest, @PathVariable Long actionId) throws IllegalAccessException {
+    public ResponseEntity<ResponseWithoutData> addRules(@RequestBody @Validated List<AddRulesRequest> rulesRequest, @PathVariable Long actionId) throws IllegalAccessException {
         RulesAction existingAct = rulesService.getAction(actionId);
         ResponseWithoutData res = new ResponseWithoutData();
         if (existingAct == null) {
@@ -114,5 +114,11 @@ public class RulesController {
         res.setData(ruleResponse);
         res.setMessage("Get data success!");
         return new ResponseEntity<ResponseData<RuleResponse>>(res, HttpStatus.OK);
+    }
+
+    // belum selesai
+    @PostMapping("add-to-customer")
+    public ResponseEntity<ResponseWithoutData> addActionToCustomer(@RequestBody AddActionToCustomerReq req) {
+        return new ResponseEntity<ResponseWithoutData>(null);
     }
 }

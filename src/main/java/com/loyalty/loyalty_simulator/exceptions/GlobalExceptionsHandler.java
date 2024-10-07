@@ -24,7 +24,7 @@ public class GlobalExceptionsHandler {
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
     @ExceptionHandler(NotFoundException.class)
-    public <T> ResponseEntity<ResponseData<T>> handleNotFoundException(NotFoundException exception, HttpServletRequest request) {
+    public <T> ResponseEntity<ResponseData<T>> handleNotFoundException(NotFoundException exception) {
         ResponseData<T> res = new ResponseData<T>();
         res.setMessage(exception.getMessage());
         res.setData(null);

@@ -29,6 +29,9 @@ public class RulesAction {
     @JsonIgnore
     private List<PointHistory> pointHistory = new ArrayList<>();
 
+    @OneToMany(mappedBy = "action")
+    private Set<CustomerAction> customerActions = new HashSet<>();
+
     public List<PointHistory> getPointHistory() {
         return pointHistory;
     }
