@@ -116,9 +116,11 @@ public class RulesController {
         return new ResponseEntity<ResponseData<RuleResponse>>(res, HttpStatus.OK);
     }
 
-    // belum selesai
     @PostMapping("add-to-customer")
     public ResponseEntity<ResponseWithoutData> addActionToCustomer(@RequestBody AddActionToCustomerReq req) {
-        return new ResponseEntity<ResponseWithoutData>(null);
+        rulesService.addActionToCustomer(req.getCif(), req.getRulesActionId());
+        ResponseWithoutData res = new ResponseWithoutData();
+        res.setMessage("Successfully adding data!");
+        return new ResponseEntity<ResponseWithoutData>(res, HttpStatus.CREATED);
     }
 }

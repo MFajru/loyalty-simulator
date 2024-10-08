@@ -2,10 +2,7 @@ package com.loyalty.loyalty_simulator.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.HashSet;
 import java.util.List;
@@ -28,6 +25,8 @@ public class Customers {
     @OneToMany(mappedBy = "customers")
     private Set<PointHistory> pointHistories = new HashSet<>();
 
+    @JsonProperty("rules_matrix")
+    @JsonManagedReference("actionCust")
     @OneToMany(mappedBy = "customer")
     private Set<CustomerAction> customerActions = new HashSet<>();
 
@@ -69,5 +68,13 @@ public class Customers {
 
     public void setPoint(Integer point) {
         this.point = point;
+    }
+
+    public Set<CustomerAction> getCustomerActions() {
+        return customerActions;
+    }
+
+    public void setCustomerActions(Set<CustomerAction> customerActions) {
+        this.customerActions = customerActions;
     }
 }

@@ -36,7 +36,7 @@ public class PointHistoryService implements IPointHistoryService {
         Customers customer = customersService.getCustomer(cif);
         if (customer == null) {
             String mess = "Customer with cif " + cif + " not found.";
-            throw new NotFoundException(mess, HttpStatus.NOT_FOUND.toString());
+            throw new NotFoundException(mess);
         }
         List<PointHistory> pointHistory = pointHistoryRepository.findByCustomers(customer);
         if (pointHistory.isEmpty()) {

@@ -22,7 +22,7 @@ public class RulesAction {
     private Integer amountIncrement;
 
     @OneToMany(mappedBy = "action")
-    @JsonManagedReference
+    @JsonManagedReference("rulesAction")
     private Set<Rules> rules = new HashSet<>();
 
     @OneToMany(mappedBy = "rulesAction")

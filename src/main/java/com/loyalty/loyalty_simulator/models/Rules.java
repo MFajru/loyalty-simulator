@@ -20,7 +20,7 @@ public class Rules {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="action_id", referencedColumnName = "id")
-    @JsonBackReference
+    @JsonBackReference("rulesAction")
     private RulesAction action;
 
 

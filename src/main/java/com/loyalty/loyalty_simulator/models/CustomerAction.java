@@ -1,5 +1,6 @@
 package com.loyalty.loyalty_simulator.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -9,10 +10,13 @@ public class CustomerAction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
+    @JsonBackReference("actionCust")
+    @JoinColumn(name = "cif", referencedColumnName = "cif")
+    @ManyToOne(fetch = FetchType.LAZY)
     private Customers customer;
 
-    @ManyToOne
+    @JoinColumn(name = "action_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
     private RulesAction action;
 
     public Integer getId() {

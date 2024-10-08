@@ -1,6 +1,7 @@
 package com.loyalty.loyalty_simulator.services;
 
 import com.loyalty.loyalty_simulator.dto.AddActionToCustomerReq;
+import com.loyalty.loyalty_simulator.exceptions.BadRequestException;
 import com.loyalty.loyalty_simulator.exceptions.NotFoundException;
 import com.loyalty.loyalty_simulator.interfaces.IRulesService;
 import com.loyalty.loyalty_simulator.models.CustomerAction;
@@ -55,15 +56,20 @@ public class RulesService implements IRulesService {
     }
 
     @Override
-    public void addActionToCustomer(AddActionToCustomerReq req) {
-        Customers existCust = customersService.getCustomer(req.getCif());
+    public void addActionToCustomer(String cif, Long rulesActionId) {
+        Customers existCust = customersService.getCustomer(cif);
         if (existCust == null) {
-            throw new NotFoundException("Customer with CIF " + req.getCif() + " not found.");
+            throw new NotFoundException("Customer with CIF " + cif + " not found.");
         }
 
-        RulesAction existRulesAct = getAction(req.getRulesActionId());
+        RulesAction existRulesAct = getAction(rulesActionId);
         if (existRulesAct == null) {
-            throw new NotFoundException("Rules action with ID " + req.getRulesActionId() + " not found.");
+            throw new NotFoundException("Rules action with ID " + rulesActionId + " not found.");
+        }
+
+        CustomerAction existCustAct = customerActionRepository.findByCustomerAndAction(existCust, existRulesAct);
+        if (existCustAct != null) {
+            throw new BadRequestException("Customer " + cif + " with rules action " + rulesActionId + " is already exist");
         }
         CustomerAction newCustAct = new CustomerAction();
         newCustAct.setCustomer(existCust);

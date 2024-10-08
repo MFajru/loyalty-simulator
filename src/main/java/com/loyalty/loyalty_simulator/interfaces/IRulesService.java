@@ -9,6 +9,6 @@ public interface IRulesService {
     boolean createRulesAction(RulesAction newAction);
     Rules getRule(Long id);
     RulesAction getAction(Long id);
-    void addActionToCustomer(AddActionToCustomerReq req);
+    void addActionToCustomer(String cif, Long rulesActionId);
 
 }
