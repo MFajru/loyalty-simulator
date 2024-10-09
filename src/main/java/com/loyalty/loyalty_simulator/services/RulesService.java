@@ -1,6 +1,5 @@
 package com.loyalty.loyalty_simulator.services;
 
-import com.loyalty.loyalty_simulator.dto.AddActionToCustomerReq;
 import com.loyalty.loyalty_simulator.exceptions.BadRequestException;
 import com.loyalty.loyalty_simulator.exceptions.NotFoundException;
 import com.loyalty.loyalty_simulator.interfaces.IRulesService;
@@ -15,6 +14,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -52,7 +52,10 @@ public class RulesService implements IRulesService {
     @Override
     public RulesAction getAction(Long id) {
         Optional<RulesAction> action = rulesActionRepository.findById(id);
-        return action.orElse(null);
+        if (action.isEmpty()) {
+            throw new NotFoundException("Data with id " + id + " not found.");
+        }
+        return action.get();
     }
 
     @Override
@@ -76,5 +79,14 @@ public class RulesService implements IRulesService {
         newCustAct.setAction(existRulesAct);
 
         customerActionRepository.save(newCustAct);
+    }
+
+    @Override
+    public List<CustomerAction> getActionByCustomer(String cif) {
+        List<CustomerAction> customerActions = customerActionRepository.findByCustomer_Cif(cif);
+        if (customerActions.isEmpty()) {
+            throw new NotFoundException("Customer with CIF " + cif + " is either not exist or doesn't registered to any rules");
+        }
+        return customerActions;
     }
 }

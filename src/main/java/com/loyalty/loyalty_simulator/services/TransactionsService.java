@@ -41,7 +41,10 @@ public class TransactionsService implements ITransactionsService {
     @Override
     public Transactions getTransaction(String tranCode) {
         Optional<Transactions> transaction = transactionsRepository.findById(tranCode);
-        return transaction.orElse(null);
+        if (transaction.isEmpty()) {
+            throw new NotFoundException("Transaction with code " + tranCode + " not found.");
+        }
+        return transaction.get();
 
     }
 }

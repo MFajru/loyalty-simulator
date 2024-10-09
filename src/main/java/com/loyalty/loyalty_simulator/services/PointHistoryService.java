@@ -40,7 +40,7 @@ public class PointHistoryService implements IPointHistoryService {
         }
         List<PointHistory> pointHistory = pointHistoryRepository.findByCustomers(customer);
         if (pointHistory.isEmpty()) {
-            return null;
+            throw new NotFoundException("Data not found");
         }
         return pointHistory;
     }

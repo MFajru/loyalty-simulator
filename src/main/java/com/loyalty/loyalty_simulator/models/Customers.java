@@ -1,5 +1,6 @@
 package com.loyalty.loyalty_simulator.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -28,7 +29,7 @@ public class Customers {
     @JsonProperty("rules_matrix")
     @JsonManagedReference("actionCust")
     @OneToMany(mappedBy = "customer")
-    private Set<CustomerAction> customerActions = new HashSet<>();
+     private Set<CustomerAction> customerActions = new HashSet<>();
 
     public Set<PointHistory> getPointHistories() {
         return pointHistories;

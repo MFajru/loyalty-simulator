@@ -1,8 +1,10 @@
 package com.loyalty.loyalty_simulator.controllers;
 
+import com.loyalty.loyalty_simulator.dto.CustomerResponse;
 import com.loyalty.loyalty_simulator.dto.ResponseData;
 import com.loyalty.loyalty_simulator.dto.ResponseWithoutData;
-import com.loyalty.loyalty_simulator.dto.UpdateCustomerReq;
+import com.loyalty.loyalty_simulator.dto.UpdateCustomerRequest;
+import com.loyalty.loyalty_simulator.exceptions.NotFoundException;
 import com.loyalty.loyalty_simulator.interfaces.ICustomersService;
 import com.loyalty.loyalty_simulator.models.Customers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,30 +31,21 @@ public class CustomersController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseData<Customers>> getCustomer(@PathVariable String id) {
+    public ResponseEntity<ResponseData<CustomerResponse>> getCustomer(@PathVariable String id) {
         Customers customer = customersService.getCustomer(id);
-        ResponseData<Customers> res = new ResponseData<>();
-        if (customer == null) {
-            res.setData(null);
-            res.setMessage("Customer with id " + id + " is not found.");
-            return new ResponseEntity<ResponseData<Customers>>(res, HttpStatus.NOT_FOUND);
-        }
-        res.setData(customer);
+        ResponseData<CustomerResponse> res = new ResponseData<>();
+        CustomerResponse custRes = new CustomerResponse(customer.getCif(), customer.getName(), customer.getPoint());
+        res.setData(custRes);
         res.setMessage("Get data success!");
-        return new ResponseEntity<ResponseData<Customers>>(res, HttpStatus.OK);
+        return new ResponseEntity<ResponseData<CustomerResponse>>(res, HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ResponseWithoutData> updateCustomer(@RequestBody UpdateCustomerReq req, @PathVariable String id) {
-        boolean isUpdated = customersService.updateCustomer(id, req);
+    public ResponseEntity<ResponseWithoutData> updateCustomer(@RequestBody UpdateCustomerRequest req, @PathVariable String id) {
+        customersService.updateCustomer(id, req);
         ResponseWithoutData res = new ResponseWithoutData();
-
-        if (!isUpdated) {
-            res.setMessage("Customer with id " + id + " is not found.");
-            return new ResponseEntity<ResponseWithoutData>(res, HttpStatus.NOT_FOUND);
-        }
-
         res.setMessage("Update successfully!");
         return new ResponseEntity<ResponseWithoutData>(res, HttpStatus.OK);
     }
+
 }

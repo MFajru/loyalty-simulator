@@ -1,7 +1,9 @@
 package com.loyalty.loyalty_simulator.controllers;
 
 import com.loyalty.loyalty_simulator.dto.*;
+import com.loyalty.loyalty_simulator.exceptions.NotFoundException;
 import com.loyalty.loyalty_simulator.interfaces.IRulesService;
+import com.loyalty.loyalty_simulator.models.CustomerAction;
 import com.loyalty.loyalty_simulator.models.Rules;
 import com.loyalty.loyalty_simulator.models.RulesAction;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -50,12 +53,11 @@ public class RulesController {
     @GetMapping("/action/{id}")
     public ResponseEntity<ResponseData<RulesAction>> getAction(@PathVariable Long id) {
         RulesAction action = rulesService.getAction(id);
-        ResponseData<RulesAction> res = new ResponseData<>();
         if (action == null) {
-            res.setMessage("Data with id " + id + " not found.");
-            res.setData(null);
-            return new ResponseEntity<>(res, HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Data with id " + id + " not found.");
+
         }
+        ResponseData<RulesAction> res = new ResponseData<>();
         res.setData(action);
         res.setMessage("Successfully getting data!");
         return new ResponseEntity<>(res, HttpStatus.OK);
@@ -65,10 +67,7 @@ public class RulesController {
     public ResponseEntity<ResponseWithoutData> addRules(@RequestBody @Validated List<AddRulesRequest> rulesRequest, @PathVariable Long actionId) throws IllegalAccessException {
         RulesAction existingAct = rulesService.getAction(actionId);
         ResponseWithoutData res = new ResponseWithoutData();
-        if (existingAct == null) {
-            res.setMessage("Data with id " + actionId + " not found.");
-            return new ResponseEntity<>(res, HttpStatus.NOT_FOUND);
-        }
+        // comparison is mandatory, greater / lesser / equal mandatory (one of them should exist in json request body)
         for(AddRulesRequest ruleRequest: rulesRequest) {
             for (Field field: ruleRequest.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
@@ -83,6 +82,7 @@ public class RulesController {
             newRule.setLesserThan(ruleRequest.getLesserThan());
             newRule.setAction(existingAct);
             boolean isCreated = rulesService.createRule(newRule);
+            // move this checking to service
             if (!isCreated) {
                 res.setMessage("Failed to create data!");
                 return new ResponseEntity<ResponseWithoutData>(res, HttpStatus.BAD_REQUEST);
@@ -117,10 +117,25 @@ public class RulesController {
     }
 
     @PostMapping("add-to-customer")
-    public ResponseEntity<ResponseWithoutData> addActionToCustomer(@RequestBody AddActionToCustomerReq req) {
+    public ResponseEntity<ResponseWithoutData> addActionToCustomer(@RequestBody AddActionToCustomerRequest req) {
         rulesService.addActionToCustomer(req.getCif(), req.getRulesActionId());
         ResponseWithoutData res = new ResponseWithoutData();
         res.setMessage("Successfully adding data!");
         return new ResponseEntity<ResponseWithoutData>(res, HttpStatus.CREATED);
+    }
+
+    @GetMapping("action-customer/{cif}")
+    public ResponseEntity<ResponseData<List<ActionByCustomerResponse>>> getRulesActionByCustomer(@PathVariable String cif) {
+        List<CustomerAction> customerActions =  rulesService.getActionByCustomer(cif);
+        List<ActionByCustomerResponse> actions = new ArrayList<>();
+        for (CustomerAction customerAction: customerActions) {
+            RulesAction rulesAction = customerAction.getAction();
+            ActionByCustomerResponse actionCust = new ActionByCustomerResponse(rulesAction.getId(), rulesAction.getAddition(), rulesAction.getDeduction(), rulesAction.getPoint(), rulesAction.getAmountIncrement(), rulesAction.getRules());
+            actions.add(actionCust);
+        }
+        ResponseData<List<ActionByCustomerResponse>> res = new ResponseData<List<ActionByCustomerResponse>>();
+        res.setData(actions);
+        res.setMessage("Successful get data!");
+        return new ResponseEntity<ResponseData<List<ActionByCustomerResponse>>>(res, HttpStatus.OK);
     }
 }

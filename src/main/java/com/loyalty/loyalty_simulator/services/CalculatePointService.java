@@ -1,20 +1,16 @@
 package com.loyalty.loyalty_simulator.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.loyalty.loyalty_simulator.dto.ComparisonOperator;
 import com.loyalty.loyalty_simulator.dto.EarningRequest;
-import com.loyalty.loyalty_simulator.dto.UpdateCustomerReq;
+import com.loyalty.loyalty_simulator.dto.UpdateCustomerRequest;
 import com.loyalty.loyalty_simulator.exceptions.BadRequestException;
 import com.loyalty.loyalty_simulator.exceptions.NotFoundException;
 import com.loyalty.loyalty_simulator.interfaces.ICalculatePointService;
 import com.loyalty.loyalty_simulator.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -111,7 +107,7 @@ public class CalculatePointService implements ICalculatePointService {
     }
 
     private static PointHistory getPointHistory(Transactions transactions, RulesAction rulesAction, Customers cust) {
-        UpdateCustomerReq updateCust = new UpdateCustomerReq();
+        UpdateCustomerRequest updateCust = new UpdateCustomerRequest();
         Integer pointAcq = (transactions.getAmount() / rulesAction.getAmountIncrement()) * rulesAction.getPoint();
         updateCust.setName(cust.getName());
         updateCust.setPoint(cust.getPoint() + pointAcq);

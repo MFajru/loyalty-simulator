@@ -26,10 +26,6 @@ public class PointHistoryController {
     public ResponseEntity<ResponseData<List<PointHistory>>> getHistoryByCif(@PathVariable String cif) {
         List<PointHistory> pointHistory = pointHistoryService.getHistoryByCif(cif);
         ResponseData<List<PointHistory>> res = new ResponseData<>();
-        if (pointHistory == null) {
-            res.setMessage("Failed getting data, no data found.");
-            return new ResponseEntity<ResponseData<List<PointHistory>>>(res, HttpStatus.NOT_FOUND);
-        }
         res.setData(pointHistory);
         res.setMessage("Successfully getting data.");
         return new ResponseEntity<ResponseData<List<PointHistory>>>(res, HttpStatus.OK);
