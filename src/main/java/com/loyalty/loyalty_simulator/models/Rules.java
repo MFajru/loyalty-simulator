@@ -23,6 +23,13 @@ public class Rules {
     @JsonBackReference("rulesAction")
     private RulesAction action;
 
+    public Rules(Boolean lesserThan, Boolean greaterThan, Boolean equal, Integer comparison, RulesAction action) {
+        this.lesserThan = lesserThan;
+        this.greaterThan = greaterThan;
+        this.equal = equal;
+        this.comparison = comparison;
+        this.action = action;
+    }
 
     public RulesAction getAction() {
         return action;

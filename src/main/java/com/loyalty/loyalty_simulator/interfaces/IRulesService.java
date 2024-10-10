@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IRulesService {
     boolean createRule(Rules newRule);
-    boolean createRulesAction(RulesAction newAction);
+    void createRulesAction(RulesAction newAction);
     Rules getRule(Long id);
     RulesAction getAction(Long id);
     void addActionToCustomer(String cif, Long rulesActionId);

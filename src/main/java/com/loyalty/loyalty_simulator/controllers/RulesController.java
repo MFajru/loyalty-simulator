@@ -1,6 +1,7 @@
 package com.loyalty.loyalty_simulator.controllers;
 
 import com.loyalty.loyalty_simulator.dto.*;
+import com.loyalty.loyalty_simulator.exceptions.BadRequestException;
 import com.loyalty.loyalty_simulator.exceptions.NotFoundException;
 import com.loyalty.loyalty_simulator.interfaces.IRulesService;
 import com.loyalty.loyalty_simulator.models.CustomerAction;
@@ -40,12 +41,7 @@ public class RulesController {
         newAction.setAmountIncrement(actionRequest.getAmountIncrement());
 
         ResponseWithoutData res = new ResponseWithoutData();
-        boolean isCreated = rulesService.createRulesAction(newAction);
-        if (!isCreated) {
-            res.setMessage("Failed to create data!");
-            return new ResponseEntity<ResponseWithoutData>(res, HttpStatus.BAD_REQUEST);
-        }
-
+        rulesService.createRulesAction(newAction);
         res.setMessage("Successfully create data!");
         return new ResponseEntity<ResponseWithoutData>(res, HttpStatus.CREATED);
     }
@@ -68,6 +64,16 @@ public class RulesController {
         RulesAction existingAct = rulesService.getAction(actionId);
         ResponseWithoutData res = new ResponseWithoutData();
         // comparison is mandatory, greater / lesser / equal mandatory (one of them should exist in json request body)
+        if (rulesRequest.isEmpty()) {
+            throw new BadRequestException("The request is empty!");
+        }
+//        for(AddRulesRequest ruleRequest: rulesRequest)
+        int i = 0;
+        for (AddRulesRequest request: rulesRequest) {
+            if ((request.getEqual() == null & request.getGreaterThan() == null && request.getLesserThan() == null) || request.getComparison() == null) {
+                throw new BadRequestException("Data in index " + i + " is invalid.");
+            }
+        }
         for(AddRulesRequest ruleRequest: rulesRequest) {
             for (Field field: ruleRequest.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
@@ -75,18 +81,14 @@ public class RulesController {
                     field.set(ruleRequest, false);
                 }
             }
-            Rules newRule = new Rules();
-            newRule.setComparison(ruleRequest.getComparison());
-            newRule.setEqual(ruleRequest.getEqual());
-            newRule.setGreaterThan(ruleRequest.getGreaterThan());
-            newRule.setLesserThan(ruleRequest.getLesserThan());
-            newRule.setAction(existingAct);
+            Rules newRule = new Rules(ruleRequest.getLesserThan(), ruleRequest.getGreaterThan(), ruleRequest.getEqual(),ruleRequest.getComparison(), existingAct);
             boolean isCreated = rulesService.createRule(newRule);
             // move this checking to service
             if (!isCreated) {
                 res.setMessage("Failed to create data!");
                 return new ResponseEntity<ResponseWithoutData>(res, HttpStatus.BAD_REQUEST);
             }
+            i += 1;
         }
 
         res.setMessage("Successfully create data!");

@@ -11,6 +11,7 @@ import com.loyalty.loyalty_simulator.repositories.CustomerActionRepository;
 import com.loyalty.loyalty_simulator.repositories.RulesActionRepository;
 import com.loyalty.loyalty_simulator.repositories.RulesRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,9 +39,12 @@ public class RulesService implements IRulesService {
     }
 
     @Override
-    public boolean createRulesAction(RulesAction newAction) {
-        rulesActionRepository.save(newAction);
-        return true;
+    public void createRulesAction(RulesAction newAction) {
+        try {
+            rulesActionRepository.save(newAction);
+        } catch (Exception e) {
+            throw new ServiceException("Unexpected error occur ", e);
+        }
     }
 
     @Override
