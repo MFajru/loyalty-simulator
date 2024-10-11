@@ -33,9 +33,12 @@ public class RulesService implements IRulesService {
     }
 
     @Override
-    public boolean createRule(Rules newRule) {
-        rulesRepository.save(newRule);
-        return true;
+    public void createRule(Rules newRule) {
+        try {
+            rulesRepository.save(newRule);
+        } catch (Exception e) {
+            throw new ServiceException("Unexpected error occur ", e);
+        }
     }
 
     @Override

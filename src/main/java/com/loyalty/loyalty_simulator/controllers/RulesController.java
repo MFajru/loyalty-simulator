@@ -51,7 +51,6 @@ public class RulesController {
         RulesAction action = rulesService.getAction(id);
         if (action == null) {
             throw new NotFoundException("Data with id " + id + " not found.");
-
         }
         ResponseData<RulesAction> res = new ResponseData<>();
         res.setData(action);
@@ -63,18 +62,17 @@ public class RulesController {
     public ResponseEntity<ResponseWithoutData> addRules(@RequestBody @Validated List<AddRulesRequest> rulesRequest, @PathVariable Long actionId) throws IllegalAccessException {
         RulesAction existingAct = rulesService.getAction(actionId);
         ResponseWithoutData res = new ResponseWithoutData();
-        // comparison is mandatory, greater / lesser / equal mandatory (one of them should exist in json request body)
         if (rulesRequest.isEmpty()) {
             throw new BadRequestException("The request is empty!");
         }
-//        for(AddRulesRequest ruleRequest: rulesRequest)
         int i = 0;
         for (AddRulesRequest request: rulesRequest) {
             if ((request.getEqual() == null & request.getGreaterThan() == null && request.getLesserThan() == null) || request.getComparison() == null) {
                 throw new BadRequestException("Data in index " + i + " is invalid.");
             }
+            i += 1;
         }
-        for(AddRulesRequest ruleRequest: rulesRequest) {
+        for (AddRulesRequest ruleRequest: rulesRequest) {
             for (Field field: ruleRequest.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
                 if (field.get(ruleRequest) == null && field.getType().equals(Boolean.class)) {
@@ -82,15 +80,8 @@ public class RulesController {
                 }
             }
             Rules newRule = new Rules(ruleRequest.getLesserThan(), ruleRequest.getGreaterThan(), ruleRequest.getEqual(),ruleRequest.getComparison(), existingAct);
-            boolean isCreated = rulesService.createRule(newRule);
-            // move this checking to service
-            if (!isCreated) {
-                res.setMessage("Failed to create data!");
-                return new ResponseEntity<ResponseWithoutData>(res, HttpStatus.BAD_REQUEST);
-            }
-            i += 1;
+            rulesService.createRule(newRule);
         }
-
         res.setMessage("Successfully create data!");
         return new ResponseEntity<ResponseWithoutData>(res, HttpStatus.CREATED);
     }

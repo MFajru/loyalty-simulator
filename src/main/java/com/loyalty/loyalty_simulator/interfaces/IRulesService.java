@@ -7,7 +7,7 @@ import com.loyalty.loyalty_simulator.models.RulesAction;
 import java.util.List;
 
 public interface IRulesService {
-    boolean createRule(Rules newRule);
+    void createRule(Rules newRule);
     void createRulesAction(RulesAction newAction);
     Rules getRule(Long id);
     RulesAction getAction(Long id);
