@@ -68,7 +68,7 @@ public class RulesController {
         int i = 0;
         for (AddRulesRequest request: rulesRequest) {
             if ((request.getEqual() == null & request.getGreaterThan() == null && request.getLesserThan() == null) || request.getComparison() == null) {
-                throw new BadRequestException("Data in index " + i + " is invalid.");
+                throw new BadRequestException("Data in index " + i + " is invalid, greater_than, lesser_than, or equal must exist.");
             }
             i += 1;
         }

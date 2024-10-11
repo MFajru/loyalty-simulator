@@ -31,6 +31,7 @@ public class CalculatePointService implements ICalculatePointService {
 
     @Override
     public void earning(EarningRequest earningRequest) {
+        // check if rules is empty, check if transaction is belong to the customer
         Transactions transactions = transactionsService.getTransaction(earningRequest.getTranCode());
         if (transactions == null) {
             throw new NotFoundException("transaction not found");
