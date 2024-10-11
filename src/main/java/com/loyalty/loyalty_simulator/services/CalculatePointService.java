@@ -38,6 +38,7 @@ public class CalculatePointService implements ICalculatePointService {
         }
 
         // next, bisa check date-nya apakah sudah h+1 atau belum
+        // check if tran_code is belong to the customer
         Customers cust = customersService.getCustomer(earningRequest.getCif());
         List<RulesAction> earningActions = getEarningActions(cust);
 
