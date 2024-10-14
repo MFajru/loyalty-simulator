@@ -53,7 +53,10 @@ public class RulesService implements IRulesService {
     @Override
     public Rules getRule(Long id) {
         Optional<Rules> gottenRule = rulesRepository.findById(id);
-        return gottenRule.orElseThrow(()->new EntityNotFoundException("Rules with id " + id + " not found."));
+        if (gottenRule.isEmpty()) {
+            throw new NotFoundException("Rules with id " + id + " not found.");
+        }
+        return gottenRule.get();
     }
 
     @Override

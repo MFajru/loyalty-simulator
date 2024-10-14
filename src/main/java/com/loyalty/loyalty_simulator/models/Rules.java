@@ -31,6 +31,10 @@ public class Rules {
         this.action = action;
     }
 
+    public Rules() {
+
+    }
+
     public RulesAction getAction() {
         return action;
     }
