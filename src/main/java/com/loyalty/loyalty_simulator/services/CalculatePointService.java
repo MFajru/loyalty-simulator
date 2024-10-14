@@ -44,10 +44,13 @@ public class CalculatePointService implements ICalculatePointService {
             throw new BadRequestException("Transaction doesn't belong to the customer.");
         }
 
+
         // next, bisa check date-nya apakah sudah h+1 atau belum
         // bisa insert ke table jika transaksi udah ada tapi dengan action yang berbeda
         // untuk rules, make the new rules is logically related to the existing rules. Ex: if existing rules is lower than 50000, you cannot make rules with equal to
-        List<CustomerAction> customerActions =  rulesService.getActionByCustomer(earningRequest.getCif());
+        // rules are connected with AND logic
+        // do test if rule is more than one and the transcation is valid for that rules
+        List<CustomerAction> customerActions = rulesService.getActionByCustomer(earningRequest.getCif());
         List<RulesAction> earningActions = getEarningActions(customerActions);
         boolean isFullfilledRules = false;
         for (RulesAction earningAction: earningActions) {
@@ -87,54 +90,20 @@ public class CalculatePointService implements ICalculatePointService {
                 throw new BadRequestException("failed to add history");
             }
         }
+    }
 
-//            ComparisonOperator operator = getComparisonOperator(earningRequest, earningAction, transactions);
-//            if (!operator.getFullfilled()) {
-//                throw new BadRequestException("rules not match");
-//            }
-//
-//            UpdateCustomerRequest updateCust = new UpdateCustomerRequest();
-//            Integer pointAcq = (transactions.getAmount() / earningAction.getAmountIncrement()) * earningAction.getPoint();
-//            System.out.println(pointAcq);
-//            updateCust.setPoint(cust.getPoint() + pointAcq);
-//            System.out.println(updateCust.getPoint());
-//            customersService.updateCustomer(cust.getCif(), updateCust);
-//
-//            PointHistory pointHistory = new PointHistory();
-//            pointHistory.setRulesAction(earningAction);
-//            pointHistory.setAmount(pointAcq);
-//            pointHistory.setCustomers(cust);
-//            pointHistory.setTransactions(transactions);
-//
-////            PointHistory pointHistory = getPointHistory(transactions, earningAction, cust);
-//            boolean isHistoryAdded = pointHistoryService.addPointHistory(pointHistory);
-//
-//            if (!isHistoryAdded) {
-//                throw new BadRequestException("failed to add history");
-//            }
-
-
-//        Customers cust = customersService.getCustomer(earningRequest.getCif());
-//
-//        if (transactions.getCustomers() != cust) {
-//            throw new BadRequestException("Transaction doesn't belong to the customer.");
-//        }
-//        List<RulesAction> earningActions = getEarningActions(cust);
-//
-//        for (RulesAction earningAction: earningActions) {
-//            ComparisonOperator operator = getComparisonOperator(earningRequest, earningAction, transactions);
-//
-//            if (!operator.getFullfilled()) {
-//                throw new BadRequestException("rules not match");
-//            }
-//
-//            PointHistory pointHistory = getPointHistory(transactions, earningAction, cust);
-//            boolean isHistoryAdded = pointHistoryService.addPointHistory(pointHistory);
-//
-//            if (!isHistoryAdded) {
-//                throw new BadRequestException("failed to add history");
-//            }
-//        }
+    private static List<RulesAction> getEarningActions(List<CustomerAction> customerActions) {
+        List<RulesAction> earningActions = new ArrayList<>();
+        for (CustomerAction customerAction: customerActions) {
+            RulesAction ruleAction = customerAction.getAction();
+            if (ruleAction.getAddition()) {
+                earningActions.add(ruleAction);
+            }
+        }
+        if (earningActions.isEmpty()) {
+            throw new NotFoundException("action not found");
+        }
+        return earningActions;
     }
 
 //    private static ComparisonOperator getComparisonOperator(EarningRequest earningRequest, RulesAction earningAction, Transactions transactions) {
@@ -169,28 +138,6 @@ public class CalculatePointService implements ICalculatePointService {
 //        }
 //        return operator;
 //    }
-
-    private static List<RulesAction> getEarningActions(List<CustomerAction> customerActions) {
-//        if (cust == null) {
-//            throw new NotFoundException("customer not found");
-//        }
-//
-//        Set<CustomerAction> customerActions = cust.getCustomerActions();
-
-
-        // get earning rules action from customer actions
-        List<RulesAction> earningActions = new ArrayList<>();
-        for (CustomerAction customerAction: customerActions) {
-            RulesAction ruleAction = customerAction.getAction();
-            if (ruleAction.getAddition()) {
-                earningActions.add(ruleAction);
-            }
-        }
-        if (earningActions.isEmpty()) {
-            throw new NotFoundException("action not found");
-        }
-        return earningActions;
-    }
 
 //    private static PointHistory getPointHistory(Transactions transactions, RulesAction rulesAction, Customers cust) {
 //        UpdateCustomerRequest updateCust = new UpdateCustomerRequest();
