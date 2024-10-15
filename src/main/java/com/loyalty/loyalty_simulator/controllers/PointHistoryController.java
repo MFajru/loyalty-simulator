@@ -1,5 +1,6 @@
 package com.loyalty.loyalty_simulator.controllers;
 
+import com.loyalty.loyalty_simulator.dto.PointHistoryResponse;
 import com.loyalty.loyalty_simulator.dto.ResponseData;
 import com.loyalty.loyalty_simulator.interfaces.IPointHistoryService;
 import com.loyalty.loyalty_simulator.models.PointHistory;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -23,12 +25,13 @@ public class PointHistoryController {
     }
 
     @GetMapping("{cif}")
-    public ResponseEntity<ResponseData<List<PointHistory>>> getHistoryByCif(@PathVariable String cif) {
-        List<PointHistory> pointHistory = pointHistoryService.getHistoryByCif(cif);
-        ResponseData<List<PointHistory>> res = new ResponseData<>();
-        res.setData(pointHistory);
+    public ResponseEntity<ResponseData<List<PointHistoryResponse>>> getHistoryByCif(@PathVariable String cif) {
+        List<PointHistory> pointHistories = pointHistoryService.getHistoryByCif(cif);
+        PointHistoryResponse pHisRes = new PointHistoryResponse();
+        ResponseData<List<PointHistoryResponse>> res = new ResponseData<>();
+        res.setData(pHisRes.mappingPointHistories(pointHistories));
         res.setMessage("Successfully getting data.");
-        return new ResponseEntity<ResponseData<List<PointHistory>>>(res, HttpStatus.OK);
+        return new ResponseEntity<ResponseData<List<PointHistoryResponse>>>(res, HttpStatus.OK);
 
     }
 }

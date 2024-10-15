@@ -55,8 +55,6 @@ public class CalculatePointService implements ICalculatePointService {
         boolean isFullfilledRules = false;
         for (RulesAction earningAction: earningActions) {
             for (Rules rule: earningAction.getRules()) {
-                System.out.println(earningRequest.getAmount());
-                System.out.println(rule.getComparison());
                 if (rule.getEqual() && earningRequest.getAmount().equals(rule.getComparison())) {
                     isFullfilledRules = true;
                 } else if (rule.getGreaterThan() && earningRequest.getAmount() > rule.getComparison()) {
@@ -74,9 +72,7 @@ public class CalculatePointService implements ICalculatePointService {
             }
             UpdateCustomerRequest updateCust = new UpdateCustomerRequest();
             Integer pointAcq = (transactions.getAmount() / earningAction.getAmountIncrement()) * earningAction.getPoint();
-            System.out.println(pointAcq);
             updateCust.setPoint(cust.getPoint() + pointAcq);
-            System.out.println(updateCust.getPoint());
             customersService.updateCustomer(cust.getCif(), updateCust);
 
             PointHistory pointHistory = new PointHistory();
@@ -85,6 +81,7 @@ public class CalculatePointService implements ICalculatePointService {
             pointHistory.setCustomers(cust);
             pointHistory.setTransactions(transactions);
 
+            // cek apakah cif ada tapi action tidak ada
             boolean isHistoryAdded = pointHistoryService.addPointHistory(pointHistory);
             if (!isHistoryAdded) {
                 throw new BadRequestException("failed to add history");
@@ -105,50 +102,4 @@ public class CalculatePointService implements ICalculatePointService {
         }
         return earningActions;
     }
-
-//    private static ComparisonOperator getComparisonOperator(EarningRequest earningRequest, RulesAction earningAction, Transactions transactions) {
-//        ComparisonOperator operator = new ComparisonOperator();
-//        operator.setGreaterThan(false);
-//        operator.setGreaterThanEqual(false);
-//        operator.setEqual(false);
-//        operator.setLesserThan(false);
-//        operator.setLesserThanEqual(false);
-//        operator.setFullfilled(false);
-//
-//        if (transactions.getAmount() < earningAction.getAmountIncrement()) {
-//            throw new BadRequestException("transaction amount lower than amount increment");
-//        }
-//
-//        if (earningAction.getRules().isEmpty()) {
-//            throw new NotFoundException("Rules is empty.");
-//        }
-//
-//        for (Rules rule : earningAction.getRules()) {
-//            if (rule.getEqual() && earningRequest.getAmount().equals(rule.getComparison())) {
-//                operator.setFullfilled(true);
-//            } else if (rule.getGreaterThan() && earningRequest.getAmount() > rule.getComparison()) {
-//                operator.setFullfilled(true);
-//            } else if (rule.getLesserThan() && earningRequest.getAmount() < rule.getComparison()) {
-//                operator.setFullfilled(true);
-//            } else if (rule.getLesserThan() && rule.getEqual() && earningRequest.getAmount() <= rule.getComparison()) {
-//                operator.setFullfilled(true);
-//            } else if (rule.getGreaterThan() && rule.getEqual() && rule.getEqual() && earningRequest.getAmount() >= rule.getComparison()) {
-//                operator.setFullfilled(true);
-//            }
-//        }
-//        return operator;
-//    }
-
-//    private static PointHistory getPointHistory(Transactions transactions, RulesAction rulesAction, Customers cust) {
-//        UpdateCustomerRequest updateCust = new UpdateCustomerRequest();
-//        Integer pointAcq = (transactions.getAmount() / rulesAction.getAmountIncrement()) * rulesAction.getPoint();
-//        updateCust.setPoint(cust.getPoint() + pointAcq);
-//
-//        PointHistory pointHistory = new PointHistory();
-//        pointHistory.setRulesAction(rulesAction);
-//        pointHistory.setAmount(pointAcq);
-//        pointHistory.setCustomers(cust);
-//        pointHistory.setTransactions(transactions);
-//        return pointHistory;
-//    }
 }

@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface PointHistoryRepository extends JpaRepository<PointHistory, Long> {
     List<PointHistory> findByCustomers(Customers customer);
+    // cek apakah cif ada tapi action tidak ada
+//    PointHistory findByRulesAction
 }
