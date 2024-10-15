@@ -19,9 +19,9 @@ public class PointHistory {
 
     private Integer amount;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "tran_id", referencedColumnName = "tranCode")
-    @JsonManagedReference("pointHistoryRef")
+    @JsonBackReference("pointHistoryRef")
     private Transactions transactions;
 
     @ManyToOne

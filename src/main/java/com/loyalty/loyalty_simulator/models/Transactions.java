@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "zzz_transactions")
@@ -25,16 +26,16 @@ public class Transactions {
     private Customers customers;
 
     @JsonProperty("tran_point_history")
-    @OneToOne(mappedBy = "transactions")
-    @JsonBackReference("pointHistoryRef")
-    private PointHistory tranPointHistory;
+    @OneToMany(mappedBy = "transactions")
+    @JsonManagedReference("pointHistoryRef")
+    private List<PointHistory> tranPointHistories;
 
-    public PointHistory getTranPointHistory() {
-        return tranPointHistory;
+    public List<PointHistory> getTranPointHistories() {
+        return tranPointHistories;
     }
 
-    public void setTranPointHistory(PointHistory pointHistory) {
-        this.tranPointHistory = pointHistory;
+    public void setTranPointHistories(List<PointHistory> tranPointHistor) {
+        this.tranPointHistories = tranPointHistor;
     }
 
     public String getTranCode() {
