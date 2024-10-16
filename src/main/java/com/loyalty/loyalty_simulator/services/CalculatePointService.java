@@ -52,21 +52,10 @@ public class CalculatePointService implements ICalculatePointService {
         // do test if rule is more than one and the transcation is valid for that rules
         List<CustomerAction> customerActions = rulesService.getActionByCustomer(earningRequest.getCif());
         List<RulesAction> earningActions = getEarningActions(customerActions);
-        boolean isFullfilledRules = false;
         for (RulesAction earningAction: earningActions) {
             for (Rules rule: earningAction.getRules()) {
-                if (rule.getEqual() && earningRequest.getAmount().equals(rule.getComparison())) {
-                    isFullfilledRules = true;
-                } else if (rule.getGreaterThan() && earningRequest.getAmount() > rule.getComparison()) {
-                    isFullfilledRules = true;
-                } else if (rule.getLesserThan() && earningRequest.getAmount() < rule.getComparison()) {
-                    isFullfilledRules = true;
-                } else if (rule.getLesserThan() && rule.getEqual() && earningRequest.getAmount() <= rule.getComparison()) {
-                    isFullfilledRules = true;
-                } else if (rule.getGreaterThan() && rule.getEqual() && rule.getEqual() && earningRequest.getAmount() >= rule.getComparison()) {
-                    isFullfilledRules = true;
-                }
-                if (!isFullfilledRules) {
+                boolean isRulesFullfilled = isRulesFullfilled(earningRequest, rule);
+                if (!isRulesFullfilled) {
                     throw new BadRequestException("Rules not match.");
                 }
             }
@@ -81,9 +70,24 @@ public class CalculatePointService implements ICalculatePointService {
             pointHistory.setCustomers(cust);
             pointHistory.setTransactions(transactions);
 
-            // cek apakah cif ada tapi action tidak ada
             pointHistoryService.addPointHistory(pointHistory);
         }
+    }
+
+    private static boolean isRulesFullfilled(EarningRequest earningRequest, Rules rule) {
+        boolean isRulesFullfilled = false;
+        if (rule.getEqual() && earningRequest.getAmount().equals(rule.getComparison())) {
+            isRulesFullfilled = true;
+        } else if (rule.getGreaterThan() && earningRequest.getAmount() > rule.getComparison()) {
+            isRulesFullfilled = true;
+        } else if (rule.getLesserThan() && earningRequest.getAmount() < rule.getComparison()) {
+            isRulesFullfilled = true;
+        } else if (rule.getLesserThan() && rule.getEqual() && earningRequest.getAmount() <= rule.getComparison()) {
+            isRulesFullfilled = true;
+        } else if (rule.getGreaterThan() && rule.getEqual() && rule.getEqual() && earningRequest.getAmount() >= rule.getComparison()) {
+            isRulesFullfilled = true;
+        }
+        return isRulesFullfilled;
     }
 
     private static List<RulesAction> getEarningActions(List<CustomerAction> customerActions) {

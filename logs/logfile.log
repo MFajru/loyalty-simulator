@@ -138,3 +138,34 @@
 2024-10-16T11:34:11.539+07:00  INFO 46188 --- [loyalty-simulator] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2024-10-16T11:34:11.542+07:00  INFO 46188 --- [loyalty-simulator] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2024-10-16T11:34:11.910+07:00  INFO 46188 --- [loyalty-simulator] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-10-16T11:34:15.289+07:00  INFO 30984 --- [loyalty-simulator] [main] c.l.l.LoyaltySimulatorApplication        : Starting LoyaltySimulatorApplication using Java 17.0.11 with PID 30984 (D:\coding\loyalty-simulator\build\classes\java\main started by 67754 in D:\coding\loyalty-simulator)
+2024-10-16T11:34:15.291+07:00  INFO 30984 --- [loyalty-simulator] [main] c.l.l.LoyaltySimulatorApplication        : No active profile set, falling back to 1 default profile: "default"
+2024-10-16T11:34:15.856+07:00  INFO 30984 --- [loyalty-simulator] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-10-16T11:34:15.940+07:00  INFO 30984 --- [loyalty-simulator] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 77 ms. Found 6 JPA repository interfaces.
+2024-10-16T11:34:16.464+07:00  INFO 30984 --- [loyalty-simulator] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-10-16T11:34:16.478+07:00  INFO 30984 --- [loyalty-simulator] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-10-16T11:34:16.478+07:00  INFO 30984 --- [loyalty-simulator] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.28]
+2024-10-16T11:34:16.561+07:00  INFO 30984 --- [loyalty-simulator] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-10-16T11:34:16.562+07:00  INFO 30984 --- [loyalty-simulator] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1241 ms
+2024-10-16T11:34:16.814+07:00  INFO 30984 --- [loyalty-simulator] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-10-16T11:34:16.863+07:00  INFO 30984 --- [loyalty-simulator] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-10-16T11:34:16.894+07:00  INFO 30984 --- [loyalty-simulator] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-10-16T11:34:17.260+07:00  INFO 30984 --- [loyalty-simulator] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-10-16T11:34:17.325+07:00  INFO 30984 --- [loyalty-simulator] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-10-16T11:34:17.865+07:00  INFO 30984 --- [loyalty-simulator] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection@2aa6bbad
+2024-10-16T11:34:17.870+07:00  INFO 30984 --- [loyalty-simulator] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-10-16T11:34:18.064+07:00  WARN 30984 --- [loyalty-simulator] [main] org.hibernate.dialect.Dialect            : HHH000511: The 12.2.0 version for [org.hibernate.dialect.OracleDialect] is no longer supported, hence certain features may not work properly. The minimum supported version is 19.0.0. Check the community dialects project for available legacy versions.
+2024-10-16T11:34:20.885+07:00  INFO 30984 --- [loyalty-simulator] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-10-16T11:34:23.394+07:00  INFO 30984 --- [loyalty-simulator] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-10-16T11:34:24.203+07:00  WARN 30984 --- [loyalty-simulator] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-10-16T11:34:24.684+07:00  INFO 30984 --- [loyalty-simulator] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2024-10-16T11:34:24.697+07:00  INFO 30984 --- [loyalty-simulator] [main] c.l.l.LoyaltySimulatorApplication        : Started LoyaltySimulatorApplication in 9.874 seconds (process running for 10.542)
+2024-10-16T11:34:37.494+07:00  INFO 30984 --- [loyalty-simulator] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-10-16T11:34:37.494+07:00  INFO 30984 --- [loyalty-simulator] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-10-16T11:34:37.496+07:00  INFO 30984 --- [loyalty-simulator] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2024-10-16T13:29:36.747+07:00  WARN 30984 --- [loyalty-simulator] [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1h30m18s398ms446µs400ns).
+2024-10-16T14:09:04.911+07:00  WARN 30984 --- [loyalty-simulator] [http-nio-8080-exec-7] c.l.l.e.GlobalExceptionsHandler          : Customer with CIF CUS123457 is either not exist or doesn't registered to any rules
+2024-10-16T15:03:17.412+07:00  WARN 30984 --- [loyalty-simulator] [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=15m39s722ms606µs).
+2024-10-16T17:45:50.444+07:00  INFO 30984 --- [loyalty-simulator] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-10-16T17:45:50.453+07:00  INFO 30984 --- [loyalty-simulator] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-10-16T17:45:50.704+07:00  INFO 30984 --- [loyalty-simulator] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
