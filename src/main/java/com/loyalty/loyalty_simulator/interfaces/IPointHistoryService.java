@@ -5,6 +5,6 @@ import com.loyalty.loyalty_simulator.models.PointHistory;
 import java.util.List;
 
 public interface IPointHistoryService {
-    boolean addPointHistory(PointHistory pointHistory);
+    void addPointHistory(PointHistory pointHistory);
     List<PointHistory> getHistoryByCif(String cif);
 }

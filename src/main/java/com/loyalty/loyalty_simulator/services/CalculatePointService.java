@@ -82,10 +82,7 @@ public class CalculatePointService implements ICalculatePointService {
             pointHistory.setTransactions(transactions);
 
             // cek apakah cif ada tapi action tidak ada
-            boolean isHistoryAdded = pointHistoryService.addPointHistory(pointHistory);
-            if (!isHistoryAdded) {
-                throw new BadRequestException("failed to add history");
-            }
+            pointHistoryService.addPointHistory(pointHistory);
         }
     }
 
