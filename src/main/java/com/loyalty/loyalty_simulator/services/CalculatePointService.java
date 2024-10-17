@@ -46,7 +46,6 @@ public class CalculatePointService implements ICalculatePointService {
 
 
         // next, bisa check date-nya apakah sudah h+1 atau belum
-        // bisa insert ke table jika transaksi udah ada tapi dengan action yang berbeda
         // untuk rules, make the new rules is logically related to the existing rules. Ex: if existing rules is lower than 50000, you cannot make rules with equal to
         // rules are connected with AND logic
         // do test if rule is more than one and the transcation is valid for that rules
