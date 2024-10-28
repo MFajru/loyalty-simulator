@@ -2,7 +2,6 @@ package com.loyalty.loyalty_simulator.models;
 
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -10,7 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "zzz_rules_action")
-public class RulesAction {
+public class RulesAction extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

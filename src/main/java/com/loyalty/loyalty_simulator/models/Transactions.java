@@ -4,13 +4,12 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "zzz_transactions")
-public class Transactions {
+public class Transactions extends BaseEntity {
     @Id
     @JsonProperty("tran_code")
     private String tranCode;

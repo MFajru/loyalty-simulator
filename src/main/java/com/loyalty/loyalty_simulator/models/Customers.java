@@ -1,17 +1,14 @@
 package com.loyalty.loyalty_simulator.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "zzz_customers")
-public class Customers {
+public class Customers extends BaseEntity {
     @Id
     private String cif;
     private String name;
