@@ -32,6 +32,7 @@ public class RulesService implements IRulesService {
         this.customersService = customersService;
     }
 
+    // untuk rules, make the new rules is logically related to the existing rules. Ex: if existing rules is lower than 50000, you cannot make rules with equal to
     @Override
     public void createRule(Rules newRule) {
         try {

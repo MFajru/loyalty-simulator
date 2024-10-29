@@ -79,7 +79,7 @@ public class RulesController {
                     field.set(ruleRequest, false);
                 }
             }
-            Rules newRule = new Rules(ruleRequest.getLesserThan(), ruleRequest.getGreaterThan(), ruleRequest.getEqual(),ruleRequest.getComparison(), existingAct);
+            Rules newRule = new Rules(ruleRequest.getLesserThan(), ruleRequest.getGreaterThan(), ruleRequest.getEqual(),ruleRequest.getComparison(), existingAct, ruleRequest.getAdditionalRulesSet());
             rulesService.createRule(newRule);
         }
         res.setMessage("Successfully create data!");

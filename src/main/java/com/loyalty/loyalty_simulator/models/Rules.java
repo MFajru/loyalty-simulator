@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "zzz_rules")
 public class Rules {
@@ -23,18 +26,20 @@ public class Rules {
     @JsonBackReference("rulesAction")
     private RulesAction action;
 
-    @OneToOne(mappedBy = "rule")
-    private AdditionalRules additionalRule;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "rule_id")
+    private Set<AdditionalRules> additionalRules = new HashSet<>();
 
     @Embedded
     private BaseEntity baseEntity;
 
-    public Rules(Boolean lesserThan, Boolean greaterThan, Boolean equal, Integer comparison, RulesAction action) {
+    public Rules(Boolean lesserThan, Boolean greaterThan, Boolean equal, Integer comparison, RulesAction action, Set<AdditionalRules> additionalRules) {
         this.lesserThan = lesserThan;
         this.greaterThan = greaterThan;
         this.equal = equal;
         this.comparison = comparison;
         this.action = action;
+        this.additionalRules = additionalRules;
     }
 
     public Rules() {
@@ -89,12 +94,12 @@ public class Rules {
         this.equal = equal;
     }
 
-    public AdditionalRules getAdditionalRule() {
-        return additionalRule;
+    public Set<AdditionalRules> getAdditionalRules() {
+        return additionalRules;
     }
 
-    public void setAdditionalRule(AdditionalRules additionalRule) {
-        this.additionalRule = additionalRule;
+    public void setAdditionalRules(Set<AdditionalRules> additionalRules) {
+        this.additionalRules = additionalRules;
     }
 
     public BaseEntity getBaseEntity() {

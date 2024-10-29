@@ -46,9 +46,9 @@ public class CalculatePointService implements ICalculatePointService {
 
 
         // next, bisa check date-nya apakah sudah h+1 atau belum
-        // untuk rules, make the new rules is logically related to the existing rules. Ex: if existing rules is lower than 50000, you cannot make rules with equal to
         // rules are connected with AND logic
         // do test if rule is more than one and the transcation is valid for that rules
+        // if there are tactical rules, customer still got the point from basic rules
         List<CustomerAction> customerActions = rulesService.getActionByCustomer(earningRequest.getCif());
         List<RulesAction> earningActions = getEarningActions(customerActions);
         for (RulesAction earningAction: earningActions) {

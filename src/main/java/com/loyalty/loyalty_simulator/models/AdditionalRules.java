@@ -14,12 +14,16 @@ public class AdditionalRules {
     @JsonProperty("acc_terminal_id")
     private String accTerminalId;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "rule_id", referencedColumnName = "id")
-    private Rules rule;
-
     @Embedded
     private BaseEntity baseEntity;
+
+    public AdditionalRules(String accMerchantId, String accTerminalId) {
+        this.accMerchantId = accMerchantId;
+        this.accTerminalId = accTerminalId;
+    }
+
+    public AdditionalRules() {
+    }
 
     public Long getId() {
         return id;
@@ -43,14 +47,6 @@ public class AdditionalRules {
 
     public void setAccTerminalId(String accTerminalId) {
         this.accTerminalId = accTerminalId;
-    }
-
-    public Rules getRule() {
-        return rule;
-    }
-
-    public void setRule(Rules rule) {
-        this.rule = rule;
     }
 
     public BaseEntity getBaseEntity() {

@@ -1,7 +1,11 @@
 package com.loyalty.loyalty_simulator.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.loyalty.loyalty_simulator.models.AdditionalRules;
 import com.loyalty.loyalty_simulator.models.RulesAction;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class AddRulesRequest {
     @JsonProperty("lesser_than")
@@ -11,6 +15,8 @@ public class AddRulesRequest {
     private Boolean equal;
     private Integer comparison;
     private RulesAction rulesAction;
+    @JsonProperty("additional_rules")
+    private Set<AdditionalRules> additionalRulesSet = new HashSet<>();
 
     public RulesAction getRulesAction() {
         return rulesAction;
@@ -52,5 +58,11 @@ public class AddRulesRequest {
         this.comparison = comparison;
     }
 
+    public Set<AdditionalRules> getAdditionalRulesSet() {
+        return additionalRulesSet;
+    }
 
+    public void setAdditionalRulesSet(Set<AdditionalRules> additionalRulesSet) {
+        this.additionalRulesSet = additionalRulesSet;
+    }
 }
