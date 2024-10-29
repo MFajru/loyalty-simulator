@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "zzz_customers")
-public class Customers extends BaseEntity {
+public class Customers{
     @Id
     private String cif;
     private String name;
@@ -27,6 +27,9 @@ public class Customers extends BaseEntity {
     @JsonManagedReference("actionCust")
     @OneToMany(mappedBy = "customer")
      private Set<CustomerAction> customerActions = new HashSet<>();
+
+    @Embedded
+    private BaseEntity baseEntity;
 
     public Set<PointHistory> getPointHistories() {
         return pointHistories;
@@ -74,5 +77,13 @@ public class Customers extends BaseEntity {
 
     public void setCustomerActions(Set<CustomerAction> customerActions) {
         this.customerActions = customerActions;
+    }
+
+    public BaseEntity getBaseEntity() {
+        return baseEntity;
+    }
+
+    public void setBaseEntity(BaseEntity baseEntity) {
+        this.baseEntity = baseEntity;
     }
 }

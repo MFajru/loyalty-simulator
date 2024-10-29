@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "zzz_rules")
-public class Rules extends BaseEntity {
+public class Rules {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -22,6 +22,12 @@ public class Rules extends BaseEntity {
     @JoinColumn(name="action_id", referencedColumnName = "id")
     @JsonBackReference("rulesAction")
     private RulesAction action;
+
+    @OneToOne(mappedBy = "rule")
+    private AdditionalRules additionalRule;
+
+    @Embedded
+    private BaseEntity baseEntity;
 
     public Rules(Boolean lesserThan, Boolean greaterThan, Boolean equal, Integer comparison, RulesAction action) {
         this.lesserThan = lesserThan;
@@ -81,5 +87,21 @@ public class Rules extends BaseEntity {
 
     public void setEqual(Boolean equal) {
         this.equal = equal;
+    }
+
+    public AdditionalRules getAdditionalRule() {
+        return additionalRule;
+    }
+
+    public void setAdditionalRule(AdditionalRules additionalRule) {
+        this.additionalRule = additionalRule;
+    }
+
+    public BaseEntity getBaseEntity() {
+        return baseEntity;
+    }
+
+    public void setBaseEntity(BaseEntity baseEntity) {
+        this.baseEntity = baseEntity;
     }
 }

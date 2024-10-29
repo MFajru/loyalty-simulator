@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "zzz_point_history")
-public class PointHistory extends BaseEntity {
+public class PointHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,6 +29,9 @@ public class PointHistory extends BaseEntity {
     @JsonProperty("rules_action")
     @JsonIgnore
     private RulesAction rulesAction;
+
+    @Embedded
+    private BaseEntity baseEntity;
 
     public RulesAction getRulesAction() {
         return rulesAction;
@@ -68,5 +71,13 @@ public class PointHistory extends BaseEntity {
 
     public void setCustomers(Customers customers) {
         this.customers = customers;
+    }
+
+    public BaseEntity getBaseEntity() {
+        return baseEntity;
+    }
+
+    public void setBaseEntity(BaseEntity baseEntity) {
+        this.baseEntity = baseEntity;
     }
 }
