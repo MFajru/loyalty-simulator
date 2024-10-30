@@ -34,6 +34,7 @@ public class RulesController {
                 field.set(actionRequest, false);
             }
         }
+        // data add action request yang baru belum masuk
         RulesAction newAction = new RulesAction();
         newAction.setPoint(actionRequest.getPoint());
         newAction.setDeduction(actionRequest.getDeduction());

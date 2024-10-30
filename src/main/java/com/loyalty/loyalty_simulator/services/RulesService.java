@@ -38,7 +38,7 @@ public class RulesService implements IRulesService {
         try {
             rulesRepository.save(newRule);
         } catch (Exception e) {
-            throw new ServiceException("Unexpected error occur ", e);
+            throw new ServiceException("Unexpected error occur, " + e.getMessage(), e);
         }
     }
 
@@ -47,7 +47,7 @@ public class RulesService implements IRulesService {
         try {
             rulesActionRepository.save(newAction);
         } catch (Exception e) {
-            throw new ServiceException("Unexpected error occur ", e);
+            throw new ServiceException("Unexpected error occur, " + e.getMessage(), e);
         }
     }
 
