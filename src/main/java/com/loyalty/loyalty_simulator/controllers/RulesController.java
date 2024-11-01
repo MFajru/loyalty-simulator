@@ -34,17 +34,25 @@ public class RulesController {
                 field.set(actionRequest, false);
             }
         }
-        // data add action request yang baru belum masuk
-        RulesAction newAction = new RulesAction();
-        newAction.setPoint(actionRequest.getPoint());
-        newAction.setDeduction(actionRequest.getDeduction());
-        newAction.setAddition(actionRequest.getAddition());
-        newAction.setAmountIncrement(actionRequest.getAmountIncrement());
+        RulesAction newAction = getAction(actionRequest);
 
         ResponseWithoutData res = new ResponseWithoutData();
         rulesService.createRulesAction(newAction);
         res.setMessage("Successfully create data!");
         return new ResponseEntity<ResponseWithoutData>(res, HttpStatus.CREATED);
+    }
+
+    private static RulesAction getAction(AddActionRequest actionRequest) {
+        RulesAction newAction = new RulesAction();
+        newAction.setPoint(actionRequest.getPoint());
+        newAction.setDeduction(actionRequest.getDeduction());
+        newAction.setAddition(actionRequest.getAddition());
+        newAction.setAmountIncrement(actionRequest.getAmountIncrement());
+        newAction.setPriority(actionRequest.getPriority());
+        newAction.setStartDate(actionRequest.getStartDate());
+        newAction.setEndDate(actionRequest.getEndDate());
+        newAction.setMaxPointsEarn(actionRequest.getMaxPointsEarn());
+        return newAction;
     }
 
     @GetMapping("/action/{id}")
@@ -85,6 +93,14 @@ public class RulesController {
         }
         res.setMessage("Successfully create data!");
         return new ResponseEntity<ResponseWithoutData>(res, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("delete-rule/{id}")
+    public ResponseEntity<ResponseWithoutData> deleteAction(@PathVariable Long id) {
+        rulesService.deleteRule(id);
+        ResponseWithoutData res = new ResponseWithoutData();
+        res.setMessage("Successfully delete rule with ID " + id);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

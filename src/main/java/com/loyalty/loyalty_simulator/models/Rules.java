@@ -21,13 +21,13 @@ public class Rules {
     private Boolean equal;
     private Integer comparison;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="action_id", referencedColumnName = "id")
     @JsonBackReference("rulesAction")
     private RulesAction action;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "rule_id")
+    @JoinColumn(name = "rule_id", nullable = false)
     private Set<AdditionalRules> additionalRules = new HashSet<>();
 
     @Embedded

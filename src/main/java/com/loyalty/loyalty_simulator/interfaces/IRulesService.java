@@ -13,5 +13,6 @@ public interface IRulesService {
     RulesAction getAction(Long id);
     void addActionToCustomer(String cif, Long rulesActionId);
     List<CustomerAction> getActionByCustomer(String cif);
+    void deleteRule(Long id);
 
 }

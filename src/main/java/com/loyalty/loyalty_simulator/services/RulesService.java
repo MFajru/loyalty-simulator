@@ -14,6 +14,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +38,22 @@ public class RulesService implements IRulesService {
     public void createRule(Rules newRule) {
         try {
             rulesRepository.save(newRule);
+        } catch (Exception e) {
+            throw new ServiceException("Unexpected error occur, " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void deleteRule(Long id) {
+        Optional<Rules> optRule = rulesRepository.findById(id);
+        if (optRule.isEmpty()) {
+            throw new NotFoundException("Rule with ID " + id + " not found.");
+        }
+        try {
+            Rules rule = optRule.get();
+            rule.setAction(null);
+            rulesRepository.save(rule);
+            rulesRepository.delete(rule);
         } catch (Exception e) {
             throw new ServiceException("Unexpected error occur, " + e.getMessage(), e);
         }
