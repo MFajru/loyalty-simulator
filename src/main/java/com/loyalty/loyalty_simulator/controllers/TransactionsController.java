@@ -61,7 +61,7 @@ public class TransactionsController {
         Set<TransactionHistoryResponse> transactionHistoryResponses = new HashSet<>();
 
         for (Transactions transaction: transactions) {
-            TransactionHistoryResponse transactionHistoryResponse = new TransactionHistoryResponse(transaction.getTranCode(), transaction.getAmount(), transaction.getTranDate());
+            TransactionHistoryResponse transactionHistoryResponse = new TransactionHistoryResponse(transaction.getTranCode(), transaction.getAmount(), transaction.getTranDate(), transaction.getBaseEntity());
             transactionHistoryResponses.add(transactionHistoryResponse);
         }
         ResponseData<Set<TransactionHistoryResponse>> res = new ResponseData<>();

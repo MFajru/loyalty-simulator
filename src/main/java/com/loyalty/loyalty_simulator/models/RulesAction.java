@@ -11,6 +11,19 @@ import java.util.Set;
 
 @Entity
 @Table(name = "zzz_rules_action")
+@JsonPropertyOrder({
+        "id",
+        "start_date",
+        "end_date",
+        "addition",
+        "deduction",
+        "priority",
+        "point",
+        "max_points_earn",
+        "amount_increment",
+        "base_entity"
+
+})
 public class RulesAction {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,10 +50,12 @@ public class RulesAction {
     @JsonIgnore
     private List<PointHistory> pointHistory = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "action")
     private Set<CustomerAction> customerActions = new HashSet<>();
 
     @Embedded
+    @JsonUnwrapped
     private BaseEntity baseEntity;
 
     public List<PointHistory> getPointHistory() {

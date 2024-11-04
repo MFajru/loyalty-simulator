@@ -2,6 +2,12 @@ package com.loyalty.loyalty_simulator.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.loyalty.loyalty_simulator.models.AdditionalRules;
+import com.loyalty.loyalty_simulator.models.BaseEntity;
+import jakarta.persistence.Embedded;
+
+import java.util.Set;
 
 @JsonPropertyOrder({
         "id",
@@ -9,7 +15,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "greater_than",
         "equal",
         "comparison",
-        "action"
+        "additional_rules",
+        "action",
+        "base_entity"
 })
 public class RuleResponse {
     private Long id;
@@ -20,6 +28,12 @@ public class RuleResponse {
     private Boolean equal;
     private Integer comparison;
     private RuleActionResponse action;
+    @JsonProperty("additional_rules")
+    private Set<AdditionalRules> additionalRules;
+    @Embedded
+    @JsonUnwrapped
+    @JsonProperty("base_entity")
+    private BaseEntity baseEntity;
 
     public Long getId() {
         return id;
@@ -67,5 +81,21 @@ public class RuleResponse {
 
     public void setAction(RuleActionResponse action) {
         this.action = action;
+    }
+
+    public Set<AdditionalRules> getAdditionalRules() {
+        return additionalRules;
+    }
+
+    public void setAdditionalRules(Set<AdditionalRules> additionalRules) {
+        this.additionalRules = additionalRules;
+    }
+
+    public BaseEntity getBaseEntity() {
+        return baseEntity;
+    }
+
+    public void setBaseEntity(BaseEntity baseEntity) {
+        this.baseEntity = baseEntity;
     }
 }

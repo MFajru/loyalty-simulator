@@ -112,6 +112,8 @@ public class RulesController {
         ruleResponse.setEqual(rule.getEqual());
         ruleResponse.setGreaterThan(rule.getGreaterThan());
         ruleResponse.setLessThan(rule.getLesserThan());
+        ruleResponse.setAdditionalRules(rule.getAdditionalRules());
+        ruleResponse.setBaseEntity(rule.getBaseEntity());
 
         RuleActionResponse ruleActionResponse =  new RuleActionResponse();
         ruleActionResponse.setAddition(rule.getAction().getAddition());
@@ -140,7 +142,7 @@ public class RulesController {
         List<ActionByCustomerResponse> actions = new ArrayList<>();
         for (CustomerAction customerAction: customerActions) {
             RulesAction rulesAction = customerAction.getAction();
-            ActionByCustomerResponse actionCust = new ActionByCustomerResponse(rulesAction.getId(), rulesAction.getAddition(), rulesAction.getDeduction(), rulesAction.getPoint(), rulesAction.getAmountIncrement(), rulesAction.getRules());
+            ActionByCustomerResponse actionCust = new ActionByCustomerResponse(rulesAction.getId(), rulesAction.getAddition(), rulesAction.getDeduction(), rulesAction.getPoint(), rulesAction.getPriority(), rulesAction.getMaxPointsEarn(),rulesAction.getAmountIncrement(), rulesAction.getStartDate(), rulesAction.getEndDate(), rulesAction.getRules(), rulesAction.getBaseEntity());
             actions.add(actionCust);
         }
         ResponseData<List<ActionByCustomerResponse>> res = new ResponseData<List<ActionByCustomerResponse>>();

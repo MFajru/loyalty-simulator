@@ -44,11 +44,12 @@ public class CalculatePointService implements ICalculatePointService {
             throw new BadRequestException("Transaction doesn't belong to the customer.");
         }
 
-
         // next, bisa check date-nya apakah sudah h+1 atau belum
         // rules are connected with AND logic
         // do test if rule is more than one and the transcation is valid for that rules
         // if there are tactical rules, customer still got the point from basic rules
+        // check date rules action apakah sudah berlaku, expired, atau tidak
+        // check additional rules if exist (tid, mid is exist in transaction)
         List<CustomerAction> customerActions = rulesService.getActionByCustomer(earningRequest.getCif());
         List<RulesAction> earningActions = getEarningActions(customerActions);
         for (RulesAction earningAction: earningActions) {

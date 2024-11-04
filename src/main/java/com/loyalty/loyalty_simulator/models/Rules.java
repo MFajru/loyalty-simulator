@@ -2,6 +2,8 @@ package com.loyalty.loyalty_simulator.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -9,6 +11,15 @@ import java.util.Set;
 
 @Entity
 @Table(name = "zzz_rules")
+@JsonPropertyOrder({
+        "id",
+        "comparison",
+        "equal",
+        "greater_than",
+        "lesser_than",
+        "additional_rules",
+        "base_entity"
+})
 public class Rules {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,11 +37,13 @@ public class Rules {
     @JsonBackReference("rulesAction")
     private RulesAction action;
 
+    @JsonProperty("additional_rules")
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "rule_id", nullable = false)
     private Set<AdditionalRules> additionalRules = new HashSet<>();
 
     @Embedded
+    @JsonUnwrapped
     private BaseEntity baseEntity;
 
     public Rules(Boolean lesserThan, Boolean greaterThan, Boolean equal, Integer comparison, RulesAction action, Set<AdditionalRules> additionalRules) {

@@ -34,7 +34,7 @@ public class CustomersController {
     public ResponseEntity<ResponseData<CustomerResponse>> getCustomer(@PathVariable String id) {
         Customers customer = customersService.getCustomer(id);
         ResponseData<CustomerResponse> res = new ResponseData<>();
-        CustomerResponse custRes = new CustomerResponse(customer.getCif(), customer.getName(), customer.getPoint());
+        CustomerResponse custRes = new CustomerResponse(customer.getCif(), customer.getName(), customer.getPoint(), customer.getBaseEntity());
         res.setData(custRes);
         res.setMessage("Get data success!");
         return new ResponseEntity<ResponseData<CustomerResponse>>(res, HttpStatus.OK);

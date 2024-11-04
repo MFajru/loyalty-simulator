@@ -3,6 +3,7 @@ package com.loyalty.loyalty_simulator.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import jakarta.persistence.*;
 
 @Entity
@@ -31,6 +32,7 @@ public class PointHistory {
     private RulesAction rulesAction;
 
     @Embedded
+    @JsonUnwrapped
     private BaseEntity baseEntity;
 
     public RulesAction getRulesAction() {

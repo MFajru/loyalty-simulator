@@ -2,6 +2,7 @@ package com.loyalty.loyalty_simulator.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -29,6 +30,7 @@ public class Customers{
      private Set<CustomerAction> customerActions = new HashSet<>();
 
     @Embedded
+    @JsonUnwrapped
     private BaseEntity baseEntity;
 
     public Set<PointHistory> getPointHistories() {

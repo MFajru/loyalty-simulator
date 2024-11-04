@@ -1,6 +1,8 @@
 package com.loyalty.loyalty_simulator.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,6 +16,8 @@ public class AdditionalRules {
     @JsonProperty("acc_terminal_id")
     private String accTerminalId;
 
+    @JsonUnwrapped
+    @JsonIgnore
     @Embedded
     private BaseEntity baseEntity;
 

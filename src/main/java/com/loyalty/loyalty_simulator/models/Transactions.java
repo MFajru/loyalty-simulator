@@ -1,14 +1,23 @@
 package com.loyalty.loyalty_simulator.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
+
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "zzz_transactions")
+@JsonPropertyOrder({
+        "tran_type",
+        "amount",
+        "cardBased",
+        "tran_code",
+        "tran_date",
+        "merchant_id",
+        "terminal_id",
+        "tran_point_history",
+        "base_entity"})
 public class Transactions {
     @Id
     @JsonProperty("tran_code")
@@ -24,7 +33,7 @@ public class Transactions {
     private String terminalId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cust_cif" , referencedColumnName = "cif")
+    @JoinColumn(name = "cust_cif", referencedColumnName = "cif")
     @JsonBackReference
     private Customers customers;
 
@@ -34,6 +43,7 @@ public class Transactions {
     private List<PointHistory> tranPointHistories;
 
     @Embedded
+    @JsonUnwrapped
     private BaseEntity baseEntity;
 
     public List<PointHistory> getTranPointHistories() {
@@ -116,3 +126,5 @@ public class Transactions {
         this.baseEntity = baseEntity;
     }
 }
+
+

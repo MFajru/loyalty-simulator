@@ -1,6 +1,7 @@
 package com.loyalty.loyalty_simulator.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import jakarta.persistence.*;
 
 @Entity
@@ -20,6 +21,7 @@ public class CustomerAction {
     private RulesAction action;
 
     @Embedded
+    @JsonUnwrapped
     private BaseEntity baseEntity;
 
     public Integer getId() {
